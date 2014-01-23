@@ -2,60 +2,69 @@
 <html>
 	<head>
 		<title>CaptChat</title>
-		<script type="text/javascript" src=http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js></script>
+		<script type="text/javascript" src='http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js'></script>
 		<script type="text/javascript" src='scripts/Font.js'></script>
 		<script type="text/javascript">
-		  	$(document).ready(function() {
-		  		//Preloads font
-		    	var font = new Font();
-		    	font.src = "Fonts/moms.ttf";
-		    	font.fontFamily = "MomsTypewriter";
-		    	//Displays 'First' Captcha once font is ready
-		    	font.onload = function () {
-		    		$('#refresh_captcha').click();
-		    	}
-		  	});
+			$((function() {
+				//Preloads font
+				CaptChat.tCtx   = document.getElementById('textCanvas').getContext('2d');
+				var font        = new Font();
+				font.src        = "Fonts/moms.ttf";
+				font.fontFamily = "MomsTypewriter";
+				//Displays 'First' Captcha once font is ready
+				font.onload = function () {
+					CaptChat.captchaIfy("onLoad");
+				}
 
-		  	function runScript(e) {
-		  		if (e.keyCode == 13) {
-		  			captchaIfy($('#input').val());
-		  		}
-		  	}
+            }));
+            CaptChat = {
+				tCtx: {}, //Canvas context will be assigned here on page load
+				runScript: function(e) {
+					if (e.keyCode == 13) {
+						var input = document.getElementById('input');
+						CaptChat.captchaIfy(input.value);
+						CaptChat.appendImg(CaptChat.canvasToImg());
+						document.getElementById('textCanvas').getContext('2d').clearRect(0,0,400,30)
+						input.value = '';
+					}
+				},
 
-		 	function captchaIfy(input) {
-				input = input || $('#input').val();
-		    	// Getting canvas variable 
-		    	var tCtx = document.getElementById('textCanvas').getContext('2d'),
-		    	imageElem = document.getElementById('image');
+				captchaIfy: function(input) {
+					CaptChat.tCtx.font = "normal 24px MomsTypewriter";	//Set text fonts option for  canvas,html5 canvas: Text Option
+					CaptChat.tCtx.strokeStyle = "#000000";				//HTML5 canvas: Text Option
+					CaptChat.tCtx.clearRect(0,0,400,30);				//Clear previous Canvas for redraw our captcha
+					CaptChat.tCtx.strokeText(input,30,20,370);			//Stroke random string to canvas
+					CaptChat.tCtx.textBaseline = "middle";				//HTML5 canvas: Text Option,line in middle of text
+				},
 
-		    	tCtx.font= "normal 24px MomsTypewriter";  //set text fonts option for  canvas,html5 canvas: Text Option
-		   		tCtx.strokeStyle = "#000000";    //html5 canvas: Text Option
-		    
-		    	tCtx.clearRect(0,0,100,40);        //Clear previous Canvas for redraw our captcha
-			    tCtx.strokeText(input,30,20,70);  //Stroke random string to canvas
-		 
-		    	tCtx.textBaseline = "middle";                  //html5 canvas: Text Option,line in middle of text
+				canvasToDataUrl: function(tCtx) {
+					tCtx = tCtx || CaptChat.tCtx;
+					return tCtx.canvas.toDataURL
+				},
 
-		    	imageElem.src = tCtx.canvas.toDataURL(); // provide canvas url to image src
-		 
-				// console.log(imageElem.src);  //image 
-			}
+				canvasToImg: function(tCtx) {
+					tCtx = tCtx || CaptChat.tCtx;;
+					var	imageElem = document.createElement('img');
+					imageElem.src = tCtx.canvas.toDataURL();
+
+					return imageElem;
+				},
+
+				appendImg: function(img) {
+					var messages = document.getElementById('messages');
+					messages.appendChild(img);
+				},
+			};
 		</script>
 	</head>
 
 	<body>
 		<div>
-		  	<canvas id='textCanvas' width=100 height=40></canvas>
-		  	<img id='image'>
-		  	<br>
-		  	<input id="input" type=text onkeypress="runScript(event)">
-		  	<img id="refresh_captcha" src="refresh.png" onClick="captchaIfy('First');"/>
+			<ul id='messages' >
+			</ul>
+			<canvas id='textCanvas' width=400 height=30></canvas>
+			<br>
+		  	<input id="input" type=text onkeypress="CaptChat.runScript(event)">
 		</div>
 	</body>
 </html>
-
-
-
-
-
-
