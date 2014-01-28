@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-	<head>
+    <head>
         <title>CaptChat</title>
         <link rel="stylesheet" type="text/css" href="css/captchat.css" />
 		<script type="text/javascript" src='http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js'></script>
@@ -24,14 +24,18 @@
 	<body>
 		<div>
             <div id='messageWrapper'>
-            <div id='messages'>
+                <div id='messages'>
 
-            </div>
+                </div>
             </div>
 			<canvas id='textCanvas' width=150 height=30></canvas>
 			<br>
-		  	<input id="input" type=text autocomplete="off" onkeypress="CaptChat.runScript(event)">
+		  	<!--<input id="input" type=text autocomplete="off" onkeypress="CaptChat.runScript(event)">-->
             <span id="textSpan">onLoad</span>
 		</div>
 	</body>
+
+    <footer>
+        <input id="input" type=text autocomplete="off" onkeypress="CaptChat.runScript(event)">
+    </footer>
 </html>
