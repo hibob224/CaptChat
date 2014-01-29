@@ -1,0 +1,29 @@
+doctype html
+html
+	head
+		title CaptChat
+		link(rel='stylesheet', type='text/css', href='css/captchat.css')
+		script(type="text/javascript", src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js")
+		script(type="text/javascript", src="/scripts/Font.js")
+		script(type="text/javascript", src="/scripts/captchat.js")
+		script.
+			$((function() {
+				//Preloads font
+				CaptChat.tCtx   = document.getElementById('textCanvas').getContext('2d');
+				var font        = new Font();
+				font.src        = "/fonts/moms.ttf";
+				font.fontFamily = "MomsTypewriter";
+				//Displays 'First' Captcha once font is ready
+				font.onload = function () {
+					CaptChat.captchaIfy("onLoad");
+				};
+			}));
+	body
+		div
+			.messageWrapper
+				.messages.js_messages
+			canvas#textCanvas(width=150, height=30)
+			br
+			span#textSpan onLoad
+	footer
+		input#input(type="text", autocomplete="off" onkeypress="CaptChat.runScript(event)")

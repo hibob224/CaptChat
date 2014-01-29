@@ -2,29 +2,29 @@
 <html>
     <head>
         <title>CaptChat</title>
-        <link rel="stylesheet" type="text/css" href="css/captchat.css" />
+        <link rel="stylesheet" type="text/css" href="public/css/captchat.css" />
 		<script type="text/javascript" src='http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js'></script>
-		<script type="text/javascript" src='scripts/Font.js'></script>
-        <script type="text/javascript" src='scripts/captchat.js'></script>
+		<script type="text/javascript" src='public/scripts/Font.js'></script>
+        <script type="text/javascript" src='public/scripts/captchat.js'></script>
 		<script type="text/javascript">
 			$((function() {
 				//Preloads font
 				CaptChat.tCtx   = document.getElementById('textCanvas').getContext('2d');
 				var font        = new Font();
-				font.src        = "fonts/moms.ttf";
+				font.src        = "public/fonts/moms.ttf";
 				font.fontFamily = "MomsTypewriter";
 				//Displays 'First' Captcha once font is ready
 				font.onload = function () {
 					CaptChat.captchaIfy("onLoad");
-				}
+				};
             }));
 		</script>
 	</head>
 
 	<body>
 		<div>
-            <div id='messageWrapper'>
-                <div id='messages'>
+            <div id='messageWrapper' class='messageWrapper'>
+                <div id='messages' class='messages'>
 
                 </div>
             </div>

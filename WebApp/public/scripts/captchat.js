@@ -2,12 +2,12 @@ CaptChat = {
 	tCtx: {}, //Canvas context will be assigned here on page load
 	fontSize: "20px",
 	runScript: function(e) {
- 		if (e.keyCode == 13 && document.getElementById('input').value) {
+		if (e.keyCode == 13 && document.getElementById('input').value) {
 			CaptChat.doTheThing();
-			$('#messages').append('<br/>'); //New line between messages
-			$('#messages').animate({ scrollTop: $('#messages').outerHeight() }, 400, 'swing', function() {
-										$('#messages').stop(); //Stop scroll to prevent it affecting user scrolling
-								   });
+			$('.js_messages').append('<br/>'); //New line between messages
+			$('.js_messages').animate({ scrollTop: $('.js_messages').outerHeight() }, 400, 'swing', function() {
+										$('.js_messages').stop(); //Stop scroll to prevent it affecting user scrolling
+									});
 			document.getElementById('input').value = '';
 		}
 	},
@@ -25,15 +25,15 @@ CaptChat = {
 			//CaptChat.appendImg(CaptChat.canvas.toImg());
 			CaptChat.canvas.clear();
 		}
-		$('#messages').append(message);
+		$('.js_messages').append(message);
 	},
 
 	captchaIfy: function(input) {
-		CaptChat.tCtx.font = "normal "+ CaptChat.fontSize +" MomsTypewriter"; //Set text fonts option for  canvas,html5 canvas: Text Option
-		CaptChat.tCtx.strokeStyle = "#000000";				                  //HTML5 canvas: Text Option
-		CaptChat.canvas.clear();                                              //Clear previous Canvas for redraw our captcha
-		CaptChat.tCtx.strokeText(input,0,20,CaptChat.canvas.width());		  //Stroke random string to canvas
-		CaptChat.tCtx.textBaseline = "middle";				                  //HTML5 canvas: Text Option,line in middle of text
+		CaptChat.tCtx.font = "normal "+ CaptChat.fontSize +" MomsTypewriter";	//Set text fonts option for  canvas,html5 canvas: Text Option
+		CaptChat.tCtx.strokeStyle = "#000000";									//HTML5 canvas: Text Option
+		CaptChat.canvas.clear();												//Clear previous Canvas for redraw our captcha
+		CaptChat.tCtx.strokeText(input,0,20,CaptChat.canvas.width());			//Stroke random string to canvas
+		CaptChat.tCtx.textBaseline = "middle";									//HTML5 canvas: Text Option,line in middle of text
 	},
 
 	canvas: {
@@ -79,12 +79,11 @@ CaptChat = {
 		var textSpan = document.getElementById('textSpan');
 		textSpan.style.fontSize = CaptChat.fontSize; //Makes sure we're measuring the right font size
 		textSpan.innerHTML = text;
-		console.log($(textSpan).width())
 		return $(textSpan).width();
 	},
 
 	appendImg: function(img) {
-		var messages = document.getElementById('messages');
-		messages.appendChild(img)
+		var messages = document.getElementByClassName('messages');
+		messages.appendChild(img);
 	},
 };
