@@ -18,20 +18,41 @@ CaptChat = {
 
 		var message = $('<span/>', { class: 'aMessage' });
 
-		for( var word in input ) {
+		for( var word in input ) { //Split message into individual words and Captcha each word
 			CaptChat.canvas.width(CaptChat.textWidth(input[word])+10);
 			CaptChat.captchaIfy(input[word]);
 			message.append(CaptChat.canvas.toImg());
-			//CaptChat.appendImg(CaptChat.canvas.toImg());
 			CaptChat.canvas.clear();
 		}
 		$('.js_messages').append(message);
 	},
 
 	captchaIfy: function(input) {
+		CaptChat.canvas.clear();	//Clear previous Canvas for redraw our captcha
+
+		//Draws random lines behind word
+		var numLines = Math.floor(Math.random() * (15 - 5 + 1) + 5);
+		for (var i=0;i<numLines;i++) {
+			var rX1 = Math.random() * CaptChat.canvas.width(); //Line start position
+			var rY1 = Math.random() * CaptChat.canvas.height();
+			var rX2 = Math.random() * CaptChat.canvas.width(); //Line end position
+			var rY2 = Math.random() * CaptChat.canvas.height();
+			var rR = Math.random() * 255; //Random colour for line
+			var rG = Math.random() * 255;
+			var rB = Math.random() * 255;
+
+			//Draw that line
+			CaptChat.tCtx.beginPath();
+			CaptChat.tCtx.strokeStyle = 'rgb(' + rR + ',' + rG + ',' + rB + ')';
+			CaptChat.tCtx.lineWidth = Math.random() * 1;
+			CaptChat.tCtx.moveTo(rX1, rY1);
+			CaptChat.tCtx.lineTo(rX2, rY2);
+			CaptChat.tCtx.stroke();
+		}
+
+		CaptChat.tCtx.lineWidth = Math.random() * (2 - 0.5) + 0.5; //Randomish stroke widths
 		CaptChat.tCtx.font = "normal "+ CaptChat.fontSize +" MomsTypewriter";	//Set text fonts option for  canvas,html5 canvas: Text Option
 		CaptChat.tCtx.strokeStyle = "#000000";									//HTML5 canvas: Text Option
-		CaptChat.canvas.clear();												//Clear previous Canvas for redraw our captcha
 		CaptChat.tCtx.strokeText(input,0,20,CaptChat.canvas.width());			//Stroke random string to canvas
 		CaptChat.tCtx.textBaseline = "middle";									//HTML5 canvas: Text Option,line in middle of text
 	},
