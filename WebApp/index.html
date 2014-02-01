@@ -1,41 +1,37 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
-    <head>
-        <title>CaptChat</title>
-        <link rel="stylesheet" type="text/css" href="public/css/captchat.css" />
-		<script type="text/javascript" src='http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js'></script>
-		<script type="text/javascript" src='public/scripts/Font.js'></script>
-        <script type="text/javascript" src='public/scripts/captchat.js'></script>
-		<script type="text/javascript">
-			$((function() {
-				//Preloads font
-				CaptChat.tCtx   = document.getElementById('textCanvas').getContext('2d');
-				var font        = new Font();
-				font.src        = "public/fonts/moms.ttf";
-				font.fontFamily = "MomsTypewriter";
-				//Displays 'First' Captcha once font is ready
-				font.onload = function () {
-					CaptChat.captchaIfy("onLoad");
-				};
-            }));
-		</script>
-	</head>
-
-	<body>
-		<div>
-            <div id='messageWrapper' class='js_messageWrapper'>
-                <div id='messages' class='js_messages'>
-
-                </div>
-            </div>
-			<canvas id='textCanvas' width=150 height=30></canvas>
-			<br>
-		  	<!--<input id="input" type=text autocomplete="off" onkeypress="CaptChat.runScript(event)">-->
-            <span id="textSpan">onLoad</span>
-		</div>
-	</body>
-
-    <footer>
-        <input id="input" type=text autocomplete="off" onkeypress="CaptChat.runScript(event)">
-    </footer>
+  <head>
+    <title>CaptChat</title>
+    <link rel="stylesheet" type="text/css" href="css/captchat.css">
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script type="text/javascript" src="/scripts/Font.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="/scripts/captchat.js"></script>
+    <script type="text/javascript" src="/scripts/connection.js"></script>
+    <script>
+      $((function() {
+       //Preloads font
+       CaptChat.tCtx   = document.getElementById('textCanvas').getContext('2d');
+       var font        = new Font();
+       font.src        = "/fonts/moms.ttf";
+       font.fontFamily = "MomsTypewriter";
+       //Displays 'First' Captcha once font is ready
+       font.onload = function () {
+        CaptChat.captchaIfy("onLoad");
+       };
+       Connection.connect("http://localhost");
+      }));
+    </script>
+  </head>
+  <body>
+    <div>
+      <div class="messageWrapper">
+        <div class="messages js_messages"></div>
+      </div>
+      <canvas id="textCanvas" width="150" height="30"></canvas><br><span id="textSpan">onLoad</span>
+    </div>
+  </body>
+  <footer>
+    <input id="input" type="text" autocomplete="off" onkeypress="CaptChat.runScript(event)">
+  </footer>
 </html>

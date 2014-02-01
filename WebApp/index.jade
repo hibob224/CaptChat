@@ -5,7 +5,9 @@ html
 		link(rel='stylesheet', type='text/css', href='css/captchat.css')
 		script(type="text/javascript", src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js")
 		script(type="text/javascript", src="/scripts/Font.js")
+		script(type="text/javascript", src="/socket.io/socket.io.js")
 		script(type="text/javascript", src="/scripts/captchat.js")
+		script(type="text/javascript", src="/scripts/connection.js")
 		script.
 			$((function() {
 				//Preloads font
@@ -17,6 +19,7 @@ html
 				font.onload = function () {
 					CaptChat.captchaIfy("onLoad");
 				};
+				Connection.connect("http://localhost");
 			}));
 	body
 		div

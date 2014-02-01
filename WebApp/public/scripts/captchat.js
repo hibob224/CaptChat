@@ -3,6 +3,7 @@ CaptChat = {
 	fontSize: "20px",
 	runScript: function(e) {
 		if (e.keyCode == 13 && document.getElementById('input').value) {
+			Connection.sendMessage(document.getElementById('input').value);
 			CaptChat.doTheThing();
 			$('.js_messages').append('<br/>'); //New line between messages
 			$('.js_messages').animate({ scrollTop: $('.js_messages').outerHeight() }, 400, 'swing', function() {
@@ -12,11 +13,11 @@ CaptChat = {
 		}
 	},
 
-	doTheThing: function(input) {
+	doTheThing: function(input, partner) {
 		input = input || document.getElementById('input').value;
 		input = input.trim().replace(/\s+/g, ' ').split(' ');
 
-		var message = $('<span/>', { class: 'aMessage' });
+		var message = $('<span/>', { class: partner ? 'partnerMessage' : 'aMessage' });
 
 		for( var word in input ) { //Split message into individual words and Captcha each word
 			CaptChat.canvas.width(CaptChat.textWidth(input[word])+10);
