@@ -3,7 +3,7 @@ CaptChat = {
 	fontSize: "20px",
 	runScript: function(e) {
 		if (e.keyCode == 13 && document.getElementById('input').value) {
-			Connection.sendMessage(document.getElementById('input').value);
+			//Connection.sendMessage(document.getElementById('input').value);
 			CaptChat.doTheThing();
 			$('.js_messages').append('<br/>'); //New line between messages
 			$('.js_messages').animate({ scrollTop: $('.js_messages').outerHeight() }, 400, 'swing', function() {
@@ -18,13 +18,21 @@ CaptChat = {
 		input = input.trim().replace(/\s+/g, ' ').split(' ');
 
 		var message = $('<span/>', { class: partner ? 'partnerMessage' : 'aMessage' });
+		var dataUrlMessage = new Array(); //Array of image dataURLs
 
+		var i = 0;
 		for( var word in input ) { //Split message into individual words and Captcha each word
 			CaptChat.canvas.width(CaptChat.textWidth(input[word])+10);
 			CaptChat.captchaIfy(input[word]);
 			message.append(CaptChat.canvas.toImg());
+
+			dataUrlMessage[i] = CaptChat.tCtx.canvas.toDataURL(); //Add dataURL
+
 			CaptChat.canvas.clear();
+			i++;
 		}
+
+		Connection.sendMessage(JSON.stringify(dataUrlMessage)); //Stringify array and send to server
 		$('.js_messages').append(message);
 	},
 
@@ -56,6 +64,16 @@ CaptChat = {
 		CaptChat.tCtx.strokeStyle = "#000000";									//HTML5 canvas: Text Option
 		CaptChat.tCtx.strokeText(input,0,20,CaptChat.canvas.width());			//Stroke random string to canvas
 		CaptChat.tCtx.textBaseline = "middle";									//HTML5 canvas: Text Option,line in middle of text
+	},
+
+	receiveMessage: function(message) { //Displays messages received from other people. Send JSON strinified array of dataURLS
+		message = JSON.parse(message);
+		var messageSpan = $('<span/>', { class: 'partnerMessage' });
+		for (var i=0;i<message.length;i++) {
+			var img = $('<img/>', { src: message[i] });
+			messageSpan.append(img);
+		}
+		$('.js_messages').append(messageSpan);
 	},
 
 	canvas: {

@@ -10,7 +10,7 @@ Connection = {
 		});
 		Connection.listen('message', function(data) {
 			console.log(data);
-			CaptChat.doTheThing(data, true);
+			CaptChat.receiveMessage(data);
 		});
 	},
 
