@@ -19,7 +19,7 @@
        font.onload = function () {
         CaptChat.captchaIfy("onLoad");
        };
-       Connection.connect("http://localhost");
+       Connection.connect(window.location.origin);
       }));
     </script>
   </head>

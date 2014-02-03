@@ -1,6 +1,6 @@
 CaptChat = {
 	tCtx: {}, //Canvas context will be assigned here on page load
-	fontSize: "20px",
+	fontSize: 20,
 	runScript: function(e) {
 		if (e.keyCode == 13 && document.getElementById('input').value) {
 			//Connection.sendMessage(document.getElementById('input').value);
@@ -18,7 +18,7 @@ CaptChat = {
 		input = input.trim().replace(/\s+/g, ' ').split(' ');
 
 		var message = $('<span/>', { class: partner ? 'partnerMessage' : 'aMessage' });
-		var dataUrlMessage = new Array(); //Array of image dataURLs
+		var dataUrlMessage = []; //Array of image dataURLs
 
 		var i = 0;
 		for( var word in input ) { //Split message into individual words and Captcha each word
@@ -59,11 +59,21 @@ CaptChat = {
 			CaptChat.tCtx.stroke();
 		}
 
-		CaptChat.tCtx.lineWidth = Math.random() * (2 - 0.5) + 0.5; //Randomish stroke widths
-		CaptChat.tCtx.font = "normal "+ CaptChat.fontSize +" MomsTypewriter";	//Set text fonts option for  canvas,html5 canvas: Text Option
-		CaptChat.tCtx.strokeStyle = "#000000";									//HTML5 canvas: Text Option
-		CaptChat.tCtx.strokeText(input,0,20,CaptChat.canvas.width());			//Stroke random string to canvas
-		CaptChat.tCtx.textBaseline = "middle";									//HTML5 canvas: Text Option,line in middle of text
+		var pos = 0;
+		var baseLines = ["middle", "alphabetic"];
+		var fMax = CaptChat.fontSize + 2;
+		var fMin = CaptChat.fontSize - 2;
+			CaptChat.tCtx.strokeStyle = "#000000";
+		for (var j = 0; j < input.length; j++) {
+			var width = CaptChat.textWidth(input[j]);
+			var fontSize = Math.floor(Math.random()*(fMax - fMin + 1) + fMin );
+			CaptChat.tCtx.font = "normal "+ fontSize +"px MomsTypewriter";
+			CaptChat.tCtx.textBaseline = baseLines[Math.floor(Math.random() * baseLines.length)];
+			CaptChat.tCtx.lineWidth = Math.random() * (2 - 0.5) + 0.5;				//Randomish stroke widths
+			CaptChat.tCtx.strokeText(input[j],pos,20);
+			pos += width;
+		}
+		// CaptChat.tCtx.strokeText(input,0,20,CaptChat.canvas.width());			//Stroke random string to canvas
 	},
 
 	receiveMessage: function(message) { //Displays messages received from other people. Send JSON strinified array of dataURLS
@@ -74,6 +84,9 @@ CaptChat = {
 			messageSpan.append(img);
 		}
 		$('.js_messages').append(messageSpan);
+		$('.js_messages').animate({ scrollTop: $('.js_messages').outerHeight() }, 400, 'swing', function() {
+							$('.js_messages').stop(); //Stop scroll to prevent it affecting user scrolling
+						});
 	},
 
 	canvas: {
@@ -117,7 +130,7 @@ CaptChat = {
 	textWidth : function(text) {
 		text = text || document.getElementById('input').value;
 		var textSpan = document.getElementById('textSpan');
-		textSpan.style.fontSize = CaptChat.fontSize; //Makes sure we're measuring the right font size
+		textSpan.style.fontSize = CaptChat.fontSize + 'px'; //Makes sure we're measuring the right font size
 		textSpan.innerHTML = text;
 		return $(textSpan).width();
 	},

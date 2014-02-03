@@ -1,7 +1,7 @@
 var express = require("express"),
 	app     = express(),
 	server  = require('http').createServer(app),
-	io      = require('socket.io').listen(server),
+	io      = require('socket.io').listen(server, {log: false}),
 	WEBPORT = 3000;
 
 /* EXPRESS WEB FRAMEWORK THINGS BELOW */
@@ -24,7 +24,7 @@ io.sockets.on('connection', function (socket) {
 		if(typeof data == 'string'){
 			data = {message: data,room:'Derp'};
 		}
-		console.log(data.message);
+		// console.log(data.message);
 		socket.broadcast.to(data.room).emit('message', data.message);
 	});
 	socket.on('joinRoom', function(room) {
