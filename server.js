@@ -2,7 +2,7 @@ var express = require("express"),
 	app     = express(),
 	server  = require('http').createServer(app),
 	io      = require('socket.io').listen(server, {log: false}),
-	WEBPORT = 3000;
+	WEBPORT = process.env.OPENSHIFT_NODEJS_PORT || 3000;
 
 /* EXPRESS WEB FRAMEWORK THINGS BELOW */
 app.set('views', __dirname + '/WebApp');
