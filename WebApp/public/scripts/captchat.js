@@ -87,6 +87,9 @@ CaptChat = {
 		$('.js_messages').animate({ scrollTop: $('.js_messages').outerHeight() }, 400, 'swing', function() {
 							$('.js_messages').stop(); //Stop scroll to prevent it affecting user scrolling
 						});
+		if (!document.hasFocus()) {
+			$('#notify').get(0).play();
+		}
 	},
 
 	canvas: {
