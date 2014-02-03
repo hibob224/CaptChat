@@ -2,7 +2,7 @@ var express = require("express"),
 	app     = express(),
 	server  = require('http').createServer(app),
 	io      = require('socket.io').listen(server, {log: false}),
-	WEBPORT = 8080;
+	WEBPORT = 3000;
 
 /* EXPRESS WEB FRAMEWORK THINGS BELOW */
 app.set('views', __dirname + '/WebApp');
@@ -39,5 +39,5 @@ io.sockets.on('connection', function (socket) {
 	});
 });
 
-server.listen(WEBPORT);
+server.listen(process.env.PORT || WEBPORT);
 console.log('Web Server Running on port ' + WEBPORT);
