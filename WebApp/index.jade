@@ -9,16 +9,17 @@ html
 		script(type="text/javascript", src="/scripts/captchat.js")
 		script(type="text/javascript", src="/scripts/connection.js")
 		script.
+			var fontNames = new Array('moms'); //Add font name without file extension, must be .ttf
 			$((function() {
 				//Preloads font
 				CaptChat.tCtx   = document.getElementById('textCanvas').getContext('2d');
-				var font        = new Font();
-				font.src        = "/fonts/moms.ttf";
-				font.fontFamily = "MomsTypewriter";
-				//Displays 'First' Captcha once font is ready
-				font.onload = function () {
-					CaptChat.captchaIfy("onLoad");
+				
+				for (var i = fontNames.length - 1; i >= 0; i--) {
+					var font = new Font();
+					font.src = '/fonts/' + fontNames[i] + '.ttf';
+					font.fontFamily = fontNames[i];
 				};
+				
 				Connection.connect(window.location.origin);
 			}));
 	body
@@ -31,5 +32,5 @@ html
 	footer
 		input#input(type="text", autocomplete="off" onkeypress="CaptChat.runScript(event)")
 		audio#notify
-			source(src="/fonts/notify.ogg" type="audio/ogg")
-			source(src="/fonts/notify.mp3" type="audio/mpeg")
+			source(src="/sounds/notify.ogg" type="audio/ogg")
+			source(src="/sounds/notify.mp3" type="audio/mpeg")

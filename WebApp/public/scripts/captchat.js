@@ -63,11 +63,12 @@ CaptChat = {
 		var baseLines = ["middle", "alphabetic"];
 		var fMax = CaptChat.fontSize + 2;
 		var fMin = CaptChat.fontSize - 2;
-			CaptChat.tCtx.strokeStyle = "#000000";
+		CaptChat.tCtx.strokeStyle = "#000000";
 		for (var j = 0; j < input.length; j++) {
 			var width = CaptChat.textWidth(input[j]);
 			var fontSize = Math.floor(Math.random()*(fMax - fMin + 1) + fMin );
-			CaptChat.tCtx.font = "normal "+ fontSize +"px MomsTypewriter";
+			var fontNum = Math.floor(Math.random() * ((fontNames.length-1) - 0 + 1) + 0);
+			CaptChat.tCtx.font = "normal "+ fontSize +"px " + fontNames[fontNum];
 			CaptChat.tCtx.textBaseline = baseLines[Math.floor(Math.random() * baseLines.length)];
 			CaptChat.tCtx.lineWidth = Math.random() * (2 - 0.5) + 0.5;				//Randomish stroke widths
 			CaptChat.tCtx.strokeText(input[j],pos,20);
