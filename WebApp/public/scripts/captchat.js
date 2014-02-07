@@ -4,7 +4,7 @@ CaptChat = {
 	runScript: function(e) {
 		if (e.keyCode == 13 && document.getElementById('input').value) {
 			//Connection.sendMessage(document.getElementById('input').value);
-			CaptChat.doTheThing();
+			this.doTheThing();
 			$('.js_messages').append('<br/>'); //New line between messages
 			$('.js_messages').animate({ scrollTop: $('.js_messages').outerHeight() }, 400, 'swing', function() {
 										$('.js_messages').stop(); //Stop scroll to prevent it affecting user scrolling
@@ -37,41 +37,41 @@ CaptChat = {
 	},
 
 	captchaIfy: function(input) {
-		CaptChat.canvas.clear();	//Clear previous Canvas for redraw our captcha
+		this.canvas.clear();	//Clear previous Canvas for redraw our captcha
 
 		//Draws random lines behind word
 		var numLines = Math.floor(Math.random() * (15 - 5 + 1) + 5);
 		for (var i=0;i<numLines;i++) {
-			var rX1 = Math.random() * CaptChat.canvas.width(); //Line start position
-			var rY1 = Math.random() * CaptChat.canvas.height();
-			var rX2 = Math.random() * CaptChat.canvas.width(); //Line end position
-			var rY2 = Math.random() * CaptChat.canvas.height();
+			var rX1 = Math.random() * this.canvas.width(); //Line start position
+			var rY1 = Math.random() * this.canvas.height();
+			var rX2 = Math.random() * this.canvas.width(); //Line end position
+			var rY2 = Math.random() * this.canvas.height();
 			var rR = Math.random() * 255; //Random colour for line
 			var rG = Math.random() * 255;
 			var rB = Math.random() * 255;
 
 			//Draw that line
-			CaptChat.tCtx.beginPath();
-			CaptChat.tCtx.strokeStyle = 'rgb(' + rR + ',' + rG + ',' + rB + ')';
-			CaptChat.tCtx.lineWidth = Math.random() * 1;
-			CaptChat.tCtx.moveTo(rX1, rY1);
-			CaptChat.tCtx.lineTo(rX2, rY2);
-			CaptChat.tCtx.stroke();
+			this.tCtx.beginPath();
+			this.tCtx.strokeStyle = 'rgb(' + rR + ',' + rG + ',' + rB + ')';
+			this.tCtx.lineWidth = Math.random() * 1;
+			this.tCtx.moveTo(rX1, rY1);
+			this.tCtx.lineTo(rX2, rY2);
+			this.tCtx.stroke();
 		}
 
 		var pos = 0;
 		var baseLines = ["middle", "alphabetic"];
-		var fMax = CaptChat.fontSize + 2;
-		var fMin = CaptChat.fontSize - 2;
-		CaptChat.tCtx.strokeStyle = "#000000";
+		var fMax = this.fontSize + 2;
+		var fMin = this.fontSize - 2;
+		this.tCtx.strokeStyle = "#000000";
 		for (var j = 0; j < input.length; j++) {
-			var width = CaptChat.textWidth(input[j]);
+			var width = this.textWidth(input[j]);
 			var fontSize = Math.floor(Math.random()*(fMax - fMin + 1) + fMin );
 			var fontNum = Math.floor(Math.random() * ((fontNames.length-1) - 0 + 1) + 0);
-			CaptChat.tCtx.font = "normal "+ fontSize +"px " + fontNames[fontNum];
-			CaptChat.tCtx.textBaseline = baseLines[Math.floor(Math.random() * baseLines.length)];
-			CaptChat.tCtx.lineWidth = Math.random() * (2 - 0.5) + 0.5;				//Randomish stroke widths
-			CaptChat.tCtx.strokeText(input[j],pos,20);
+			this.tCtx.font = "normal "+ fontSize +"px " + fontNames[fontNum];
+			this.tCtx.textBaseline = baseLines[Math.floor(Math.random() * baseLines.length)];
+			this.tCtx.lineWidth = Math.random() * (2 - 0.5) + 0.5;				//Randomish stroke widths
+			this.tCtx.strokeText(input[j],pos,20);
 			pos += width;
 		}
 		// CaptChat.tCtx.strokeText(input,0,20,CaptChat.canvas.width());			//Stroke random string to canvas

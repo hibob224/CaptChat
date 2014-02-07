@@ -6,35 +6,46 @@ Connection = {
 		Connection.socket = io.connect(connectionString + "");
 		Connection.listen('connected', function (data) {
 			console.log(data.message);
-			Connection.sessionID = data.socketid;
+			this.sessionID = data.socketid;
 		});
-		Connection.listen('message', function(data) {
-			console.log(data);
+		Connection.listen('message', function (data) {
 			CaptChat.receiveMessage(data);
+		});
+		Connection.listen('pubKey', function (data) {
+			console.log(data.key);
+			Users[data.user].key = data.key;
 		});
 	},
 
 	listen : function( event, callback ) {
 		if (typeof event != 'string' || typeof callback != 'function' ) {
-			console.log("Connection.listen(string,function)")
+			console.error("Connection.listen(string,function)");
 			return;
 		}
-		Connection.socket.on(event, callback);
+		this.socket.on(event, callback);
 	},
 
 	sendEvent : function( event, data ) {
-		Connection.socket.emit()
+		this.socket.emit();
 	},
 
-	sendMessage : function (message) {
-		Connection.socket.emit('message', message);
+	sendMessage : function( message ) {
+		this.socket.emit('message', message);
 	},
 
-	joinRoom : function (room) {
-		Connection.socket.emit('joinRoom', room);
+	joinRoom : function( room ) {
+		this.socket.emit('joinRoom', room);
 	},
 
-	leaveRoom : function(room) {
-		Connection.socket.emit('leaveRoom', room);
+	leaveRoom : function( room ) {
+		this.socket.emit('leaveRoom', room);
+	},
+
+	sendPubKey : function( key ){
+		if(arguments.length === 0) {
+			console.error("please pass key into this function");
+			return;
+		}
+		this.socket.emit('pubKey', data);
 	}
 };
