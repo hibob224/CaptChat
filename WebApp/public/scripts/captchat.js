@@ -144,3 +144,21 @@ CaptChat = {
 		messages.appendChild(img);
 	},
 };
+
+Users = {
+	contacts: {},
+
+	addContact: function(name, armoredPublicKey) { //Adds new contact. Public key MUST BE ARMORED.
+		var key = openpgp.key.readArmored(armoredPublicKey);
+		Users.contacts[name] = armoredPublicKey;
+	},
+
+	removeContact: function(name) { //Remove named user
+		delete Users.contacts[name];
+	},
+
+	getPublicKey: function(name) { //Return openpgp key object
+		return Users.contacts[name];
+	}
+
+};
