@@ -150,7 +150,7 @@ Users = {
 
 	addContact: function(name, armoredPublicKey) { //Adds new contact. Public key MUST BE ARMORED.
 		var key = openpgp.key.readArmored(armoredPublicKey);
-		Users.contacts[name] = armoredPublicKey;
+		Users.contacts[name] = key;
 	},
 
 	removeContact: function(name) { //Remove named user
