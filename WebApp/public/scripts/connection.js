@@ -3,18 +3,22 @@ Connection = {
 	sessionID : "NOT_CONNECTED", //Filled in on connect
 
 	connect : function( connectionString ) {
-		Connection.socket = io.connect(connectionString + "");
-		Connection.listen('connected', function (data) {
+		this.socket = io.connect(connectionString + "");
+		this.listen('connected', function (data) {
 			console.log(data.message);
 			this.sessionID = data.socketid;
 		});
-		Connection.listen('message', function (data) {
+		this.listen('message', function (data) {
 			CaptChat.receiveMessage(data);
 		});
-		Connection.listen('pubKey', function (data) {
+		this.listen('pubKey', function (data) {
 			console.log(data.key);
 			Users[data.user].key = data.key;
 		});
+
+		var key = openpgp.generateKeyPair(1, 256, this.sessionID, this.sessionID);
+		this.sendPubKey(key.publicKeyArmored);
+		Users.addOwnKeys(key);
 	},
 
 	listen : function( event, callback ) {
@@ -46,6 +50,6 @@ Connection = {
 			console.error("please pass key into this function");
 			return;
 		}
-		this.socket.emit('pubKey', data);
+		this.socket.emit('pubKey', key);
 	}
 };

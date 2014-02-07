@@ -147,18 +147,25 @@ CaptChat = {
 
 Users = {
 	contacts: {},
+	ownPrivateKey: {},
+	ownPublicKey: {},
+
+	addOwnKeys: function(keys) {
+		this.ownPrivateKey = openpgp.key.readArmored(keys.privateKeyArmored);
+		this.ownPublicKey = openpgp.key.readArmored(keys.publicKeyArmored);
+	},
 
 	addContact: function(name, armoredPublicKey) { //Adds new contact. Public key MUST BE ARMORED.
 		var key = openpgp.key.readArmored(armoredPublicKey);
-		Users.contacts[name] = key;
+		this.contacts[name] = key;
 	},
 
 	removeContact: function(name) { //Remove named user
-		delete Users.contacts[name];
+		delete this.contacts[name];
 	},
 
 	getPublicKey: function(name) { //Return openpgp key object
-		return Users.contacts[name];
+		return this.contacts[name];
 	}
 
 };

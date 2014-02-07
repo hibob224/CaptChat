@@ -39,6 +39,7 @@ io.sockets.on('connection', function (socket) {
 	});
 	socket.on('pubKey', function(data){
 		//Route Pub Key
+		console.log(data);
 	});
 });
 
