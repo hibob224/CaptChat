@@ -6,21 +6,20 @@ html
 		script(type="text/javascript", src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js")
 		script(type="text/javascript", src="/scripts/Font.js")
 		script(type="text/javascript", src="/socket.io/socket.io.js")
+		script(type="text/javascript", src="/scripts/openpgp.min.js")
 		script(type="text/javascript", src="/scripts/captchat.js")
 		script(type="text/javascript", src="/scripts/connection.js")
-		script(type="text/javascript", src="/scripts/openpgp.min.js")
 		script.
 			var fontNames = new Array('moms'); //Add font name without file extension, must be .ttf
 			$((function() {
 				//Preloads font
 				CaptChat.tCtx   = document.getElementById('textCanvas').getContext('2d');
-				
+
 				for (var i = fontNames.length - 1; i >= 0; i--) {
 					var font = new Font();
 					font.src = '/fonts/' + fontNames[i] + '.ttf';
 					font.fontFamily = fontNames[i];
-				};
-				
+				}
 				Connection.connect(window.location.origin);
 			}));
 	body

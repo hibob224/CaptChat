@@ -2,7 +2,7 @@ var express = require("express"),
 	app     = express(),
 	server  = require('http').createServer(app),
 	io      = require('socket.io').listen(server, {log: false}),
-	WEBPORT = 3000;
+	WEBPORT = process.env.PORT || 3000;
 
 /* EXPRESS WEB FRAMEWORK THINGS BELOW */
 app.set('views', __dirname + '/WebApp');
@@ -15,33 +15,59 @@ app.get('/', function(req, res) {
 	res.render('index');
 });
 
+var users = {};
+
 /* SOCKET IO THINGS BELOW */
 io.sockets.on('connection', function (socket) {
-	console.log('User connected with SessionID: ' + socket.id);
-	socket.emit('connected', {message: 'Dies ist miene Wassamelone', socketid: socket.id});
-	socket.on('message', function (data) {
-		//DEBUGGING IF, ALLOWS SENDING OF PLAINTEXT INSTEAD OF OBJECTS AS A MESSAGE
-		if(typeof data == 'string'){
-			data = {message: data,room:'Derp'};
+
+	//Emit Connected message
+	socket.emit('connect', {message: 'Dies ist miene Wassamelone', socketid: socket.id});
+
+	// Listeners
+	socket.on('disconnect', function (data){
+		var username;
+		for (var prop in users) {
+			if (users.hasOwnProperty(prop)) {
+				if (users[prop].sessionid === socket.id) {
+					delete users[prop];
+				}
+			}
 		}
-		// console.log(data.message);
-		socket.broadcast.to(data.room).emit('message', data.message);
 	});
-	socket.on('joinRoom', function(room) {
+
+	socket.on('userInfo', function (data){
+		console.log(data.username + ' connected with SessionID: ' + socket.id);
+		users[data.username] = {
+			sessionid : socket.id,
+			pubKey : data.pubKey,
+		};
+		listUsers();
+		socket.join(socket.id);
+	});
+	socket.on('message', function (data) {
+		if (users.hasOwnProperty(data.user)) {
+			socket.broadcast.to(users[data.user].sessionid).emit('message', data.message);
+		}
+	});
+	socket.on('joinRoom', function (room) {
 		console.log(socket.id + " JoinedRoon " + room);
 		socket.join(room);
 	});
-	socket.on('leaveRoom', function(room) {
+	socket.on('leaveRoom', function (room) {
 		socket.leave(room);
-	});
-	socket.on('test', function() {
-		console.log('test');
-	});
-	socket.on('pubKey', function(data){
-		//Route Pub Key
-		console.log(data);
 	});
 });
 
-server.listen(process.env.PORT || WEBPORT);
+//This is for debugging, shows list of connected usersnames
+function listUsers () {
+	var keys = [];
+	for (var k in users) {
+		if (users.hasOwnProperty(k)) {
+			keys.push(k);
+		}
+	}
+	console.log(keys);
+}
+
+server.listen(WEBPORT);
 console.log('Web Server Running on port ' + WEBPORT);

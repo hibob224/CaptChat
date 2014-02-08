@@ -3,7 +3,6 @@ CaptChat = {
 	fontSize: 20,
 	runScript: function(e) {
 		if (e.keyCode == 13 && document.getElementById('input').value) {
-			//Connection.sendMessage(document.getElementById('input').value);
 			this.doTheThing();
 			$('.js_messages').append('<br/>'); //New line between messages
 			$('.js_messages').animate({ scrollTop: $('.js_messages').outerHeight() }, 400, 'swing', function() {
@@ -32,7 +31,7 @@ CaptChat = {
 			i++;
 		}
 
-		Connection.sendMessage(JSON.stringify(dataUrlMessage)); //Stringify array and send to server
+		Connection.sendMessage({user: recipient, message: JSON.stringify(dataUrlMessage)}); //Stringify array and send to server
 		$('.js_messages').append(message);
 	},
 
@@ -72,9 +71,8 @@ CaptChat = {
 			this.tCtx.textBaseline = baseLines[Math.floor(Math.random() * baseLines.length)];
 			this.tCtx.lineWidth = Math.random() * (2 - 0.5) + 0.5;				//Randomish stroke widths
 			this.tCtx.strokeText(input[j],pos,20);
-			pos += width;
+			pos += width + 2;
 		}
-		// CaptChat.tCtx.strokeText(input,0,20,CaptChat.canvas.width());			//Stroke random string to canvas
 	},
 
 	receiveMessage: function(message) { //Displays messages received from other people. Send JSON strinified array of dataURLS
@@ -147,12 +145,15 @@ CaptChat = {
 
 Users = {
 	contacts: {},
-	ownPrivateKey: {},
-	ownPublicKey: {},
+	self: {
+		username: 'user' + (new Date().getTime() / 1000).toString().split('.')[0],
+		privateKey: {},
+		publicKey: {},
+	},
 
 	addOwnKeys: function(keys) {
-		this.ownPrivateKey = openpgp.key.readArmored(keys.privateKeyArmored);
-		this.ownPublicKey = openpgp.key.readArmored(keys.publicKeyArmored);
+		this.self.privateKey = openpgp.key.readArmored(keys.privateKeyArmored);
+		this.self.publicKey = openpgp.key.readArmored(keys.publicKeyArmored);
 	},
 
 	addContact: function(name, armoredPublicKey) { //Adds new contact. Public key MUST BE ARMORED.
@@ -167,5 +168,4 @@ Users = {
 	getPublicKey: function(name) { //Return openpgp key object
 		return this.contacts[name];
 	}
-
 };
