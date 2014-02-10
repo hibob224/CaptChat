@@ -3,6 +3,7 @@ var express = require("express"),
 	server  = require('http').createServer(app),
 	io      = require('socket.io').listen(server, {log: false}),
 	WEBPORT = process.env.PORT || 3000;
+	WEBIP   = process.env.IP || "127.0.0.1"
 
 /* EXPRESS WEB FRAMEWORK THINGS BELOW */
 app.set('views', __dirname + '/WebApp');
@@ -69,5 +70,5 @@ function listUsers () {
 	console.log(keys);
 }
 
-server.listen(WEBPORT);
-console.log('Web Server Running on port ' + WEBPORT);
+server.listen(WEBPORT, WEBIP);
+console.log('Web Server Running on ' + WEBIP + ':' + WEBPORT);
