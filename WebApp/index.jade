@@ -21,7 +21,7 @@ html
 					font.fontFamily = fontNames[i];
 					CaptChat.font = font;
 				}
-				Connection.connect(window.location.origin + #{PORT});
+				Connection.connect(window.location.origin + ':' +#{PORT});
 			}));
 	body
 		div
