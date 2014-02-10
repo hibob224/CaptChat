@@ -22,7 +22,11 @@ html
 					CaptChat.font = font;
 				}
 				if(#{openshift}) {
+<<<<<<< HEAD
 					var port = window.location.protocol == 'http:' ? '8000' : '8443';
+=======
+					var port = window.location.protocal == 'http:' ? '8000' : '8443';
+>>>>>>> ce6aeef947361e161871fdece88b0a47940f4611
 					Connection.connect(window.location.origin + ':' + port );
 				} else {
 					Connection.connect(window.location.origin);
