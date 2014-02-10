@@ -13,7 +13,7 @@ app.use(express.static(__dirname + '/WebApp/public'));
 
 // Routes
 app.get('/', function(req, res) {
-	res.render('index', {PORT: WEBPORT});
+	res.render('index', {openshift: process.env.OPENSHIFT_NODEJS_PORT ? true : false});
 });
 
 var users = {};
