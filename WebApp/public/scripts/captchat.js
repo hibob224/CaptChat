@@ -1,5 +1,6 @@
 CaptChat = {
 	tCtx: {}, //Canvas context will be assigned here on page load
+	font: {},
 	fontSize: 20,
 	runScript: function(e) {
 		if (e.keyCode == 13 && document.getElementById('input').value) {
@@ -21,7 +22,7 @@ CaptChat = {
 
 		var i = 0;
 		for( var word in input ) { //Split message into individual words and Captcha each word
-			CaptChat.canvas.width(CaptChat.textWidth(input[word])+10);
+			CaptChat.canvas.width(CaptChat.font.measureText(input[word],CaptChat.fontSize).width+10);
 			CaptChat.captchaIfy(input[word]);
 			message.append(CaptChat.canvas.toImg());
 
@@ -64,14 +65,15 @@ CaptChat = {
 		var fMin = this.fontSize - 2;
 		this.tCtx.strokeStyle = "#000000";
 		for (var j = 0; j < input.length; j++) {
-			var width = this.textWidth(input[j]);
+
 			var fontSize = Math.floor(Math.random()*(fMax - fMin + 1) + fMin );
 			var fontNum = Math.floor(Math.random() * ((fontNames.length-1) - 0 + 1) + 0);
 			this.tCtx.font = "normal "+ fontSize +"px " + fontNames[fontNum];
 			this.tCtx.textBaseline = baseLines[Math.floor(Math.random() * baseLines.length)];
 			this.tCtx.lineWidth = Math.random() * (2 - 0.5) + 0.5;				//Randomish stroke widths
 			this.tCtx.strokeText(input[j],pos,20);
-			pos += width + 2;
+			// pos += width;
+			pos += this.font.measureText(input[j],fontSize).width;
 		}
 	},
 
@@ -126,15 +128,6 @@ CaptChat = {
 
 			return imageElem;
 		},
-	},
-
-	// Returns actual pixel width of @param:text or everything inside #input if nothing passed
-	textWidth : function(text) {
-		text = text || document.getElementById('input').value;
-		var textSpan = document.getElementById('textSpan');
-		textSpan.style.fontSize = CaptChat.fontSize + 'px'; //Makes sure we're measuring the right font size
-		textSpan.innerHTML = text;
-		return $(textSpan).width();
 	},
 
 	appendImg: function(img) {

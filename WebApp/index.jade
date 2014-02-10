@@ -19,6 +19,7 @@ html
 					var font = new Font();
 					font.src = '/fonts/' + fontNames[i] + '.ttf';
 					font.fontFamily = fontNames[i];
+					CaptChat.font = font;
 				}
 				Connection.connect(window.location.origin);
 			}));
@@ -28,7 +29,6 @@ html
 				.messages.js_messages
 			canvas#textCanvas(width=150, height=30)
 			br
-			span#textSpan onLoad
 	footer
 		input#input(type="text", autocomplete="off" onkeypress="CaptChat.runScript(event)")
 		audio#notify

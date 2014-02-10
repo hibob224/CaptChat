@@ -2,8 +2,8 @@ var express = require("express"),
 	app     = express(),
 	server  = require('http').createServer(app),
 	io      = require('socket.io').listen(server, {log: false}),
-	WEBPORT = process.env.PORT || 3000;
-	WEBIP   = process.env.IP || "127.0.0.1"
+	WEBPORT = process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 3000,
+	WEBIP   = process.env.OPENSHIFT_NODEJS_IP   || process.env.IP   || "0.0.0.0";
 
 /* EXPRESS WEB FRAMEWORK THINGS BELOW */
 app.set('views', __dirname + '/WebApp');
@@ -13,7 +13,7 @@ app.use(express.static(__dirname + '/WebApp/public'));
 
 // Routes
 app.get('/', function(req, res) {
-	res.render('index');
+	res.render('index', {PORT: WEBPORT});
 });
 
 var users = {};
