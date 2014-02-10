@@ -21,7 +21,12 @@ html
 					font.fontFamily = fontNames[i];
 					CaptChat.font = font;
 				}
-				Connection.connect(window.location.origin + ':' +#{PORT});
+				if(#{openshift}) {
+					var port = window.location.protocal == 'http:' ? '8000' : '8443';
+					Connection.connect(window.location.origin + ':' + port );
+				} else {
+					Connection.connect(window.location.origin);
+				}
 			}));
 	body
 		div
