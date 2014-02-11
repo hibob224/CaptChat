@@ -3,17 +3,17 @@ html
 	head
 		title CaptChat
 		link(rel='stylesheet', type='text/css', href='css/captchat.css')
-		script(type="text/javascript", src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js")
-		script(type="text/javascript", src="/scripts/Font.js")
-		script(type="text/javascript", src="/socket.io/socket.io.js")
-		script(type="text/javascript", src="/scripts/openpgp.min.js")
-		script(type="text/javascript", src="/scripts/captchat.js")
-		script(type="text/javascript", src="/scripts/connection.js")
+		script(src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js")
+		script(src="/scripts/Font.js")
+		script(src="/socket.io/socket.io.js")
+		script(src="/scripts/openpgp.min.js")
+		script(src="/scripts/captchat.js")
+		script(src="/scripts/connection.js")
 		script.
-			var fontNames = new Array('moms'); //Add font name without file extension, must be .ttf
+			var fontNames = ['moms']; //Add font name without file extension, must be .ttf
 			$((function() {
 				//Preloads font
-				CaptChat.tCtx   = document.getElementById('textCanvas').getContext('2d');
+				CaptChat.tCtx = document.getElementById('textCanvas').getContext('2d');
 
 				for (var i = fontNames.length - 1; i >= 0; i--) {
 					var font = new Font();
@@ -21,12 +21,8 @@ html
 					font.fontFamily = fontNames[i];
 					CaptChat.font = font;
 				}
-				if(#{openshift}) {
-					var port = window.location.protocol == 'http:' ? '8000' : '8443';
-					Connection.connect(window.location.origin + ':' + port );
-				} else {
-					Connection.connect(window.location.origin);
-				}
+
+				Connection.connect(window.location.origin + (#{openshift} ? (window.location.protocol == 'http:' ? ':8000' : ':8443') : ''));
 			}));
 	body
 		div

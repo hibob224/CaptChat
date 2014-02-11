@@ -8,8 +8,8 @@ var express = require("express"),
 /* EXPRESS WEB FRAMEWORK THINGS BELOW */
 app.set('views', __dirname + '/WebApp');
 app.set('view engine', 'jade');
-app.use(express.logger('dev'));
 app.use(express.static(__dirname + '/WebApp/public'));
+app.use(express.logger('dev'));
 
 // Routes
 app.get('/', function(req, res) {
@@ -20,7 +20,6 @@ var users = {};
 
 /* SOCKET IO THINGS BELOW */
 io.sockets.on('connection', function (socket) {
-
 	//Emit Connected message
 	socket.emit('connect', {message: 'Dies ist miene Wassamelone', socketid: socket.id});
 
@@ -35,7 +34,6 @@ io.sockets.on('connection', function (socket) {
 			}
 		}
 	});
-
 	socket.on('userInfo', function (data){
 		console.log(data.username + ' connected with SessionID: ' + socket.id);
 		users[data.username] = {

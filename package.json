@@ -1,15 +1,15 @@
 {
   "name": "CaptChat-Server",
-  "description": "Server backend for CaptChat",
-  "version": "0.0.1",
+  "description": "Web and Chat server for CaptChat",
+  "version": "0.1.0",
   "private": true,
   "main": "./server.js",
   "maintainers": [
     {}
   ],
   "dependencies": {
-    "express": "3.x",
-    "jade": "*",
-    "socket.io": "~0.9.16"
+    "express": "^3.4.8",
+    "jade": "^1.1.5",
+    "socket.io": "^0.9.16"
   }
 }
