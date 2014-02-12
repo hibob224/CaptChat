@@ -4,11 +4,19 @@ CaptChat = {
 	fontSize: 20,
 	runScript: function(e) {
 		if (e.keyCode == 13 && document.getElementById('input').value) {
-			this.doTheThing();
-			$('.js_messages').append('<br/>'); //New line between messages
-			$('.js_messages').animate({ scrollTop: $('.js_messages').outerHeight() }, 400, 'swing', function() {
+			switch(document.getElementById('input').value.split(' ', 1)[0]) {
+				case '/cls': //Clear messages
+					$('.js_messages').empty();
+					break;
+				default:
+					this.doTheThing();
+					$('.js_messages').append('<br/>'); //New line between messages
+					$('.js_messages').animate({ scrollTop: $('.js_messages').prop('scrollHeight') }, 400, 'swing', function() {
 										$('.js_messages').stop(); //Stop scroll to prevent it affecting user scrolling
 									});
+					break;
+			}
+
 			document.getElementById('input').value = '';
 		}
 	},
@@ -72,7 +80,6 @@ CaptChat = {
 			this.tCtx.textBaseline = baseLines[Math.floor(Math.random() * baseLines.length)];
 			this.tCtx.lineWidth = Math.random() * (2 - 0.5) + 0.5;				//Randomish stroke widths
 			this.tCtx.strokeText(input[j],pos,20);
-			// pos += width;
 			pos += this.font.measureText(input[j],fontSize).width;
 		}
 	},
