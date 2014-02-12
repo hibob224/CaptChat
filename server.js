@@ -41,11 +41,18 @@ io.sockets.on('connection', function (socket) {
 			pubKey : data.pubKey,
 		};
 		listUsers();
-		socket.join(socket.id);
+	});
+	socket.on('startChat', function (data) {
+		if (users.hasOwnProperty(data.recipient)) { //Check if the requested recipient is connected
+			data.name = getUserFromSocket(socket.id);
+			sendMessage(data.recipient, data, 'startChat');
+		} else {
+			socket.emit('error', {err:'notConnected', message:'User \' ' + data.recipient + ' \' is not connected'});
+		}
 	});
 	socket.on('message', function (data) {
 		if (users.hasOwnProperty(data.user)) {
-			socket.broadcast.to(users[data.user].sessionid).emit('message', data.message);
+			sendMessage(data.user, data.message);
 		}
 	});
 	socket.on('joinRoom', function (room) {
@@ -66,6 +73,28 @@ function listUsers () {
 		}
 	}
 	console.log(keys);
+	return keys;
+}
+
+function getUserFromSocket (socket) {
+	for (var k in users) {
+		if (users.hasOwnProperty(k)) {
+			if (users[k] === socket) return k;
+		}
+	}
+	return false;
+}
+
+/* Sends messages to indavidual connected clients
+ * @param {String} recipient Username not socketID
+ * @param {Object} data Data Object to be sent
+ * @param {String} type Optional event type, default: 'message'
+ */
+function sendMessage (recipient, data, type) {
+	type = type || 'message';
+	if (users.hasOwnProperty(recipient)) {
+		io.sockets.socket(users[recipient].sessionid).emit(type, data);
+	}
 }
 
 server.listen(WEBPORT, WEBIP);

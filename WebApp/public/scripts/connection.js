@@ -8,7 +8,6 @@ Connection = {
 			console.log(data.message);
 			this.sessionID = data.socketid;
 			var key = openpgp.generateKeyPair(1, 256, this.sessionID, this.sessionID);
-			// Connection.sendPubKey(key.publicKeyArmored);
 			Users.addOwnKeys(key);
 			Connection.sendEvent('userInfo', {username: Users.self.username,pubKey:key.publicKeyArmored});
 		});
@@ -18,6 +17,12 @@ Connection = {
 		this.listen('pubKey', function (data) {
 			console.log(data.key);
 			Users[data.user].key = data.key;
+		});
+		this.listen('startChat', function (data) {
+			Users.addContact(data.name, data.pubKey);
+		});
+		this.listen('error', function (data) {
+			console.error(data);
 		});
 	},
 
