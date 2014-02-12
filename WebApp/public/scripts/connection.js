@@ -4,7 +4,7 @@ Connection = {
 
 	connect : function( connectionString ) {
 		this.socket = io.connect(connectionString + "");
-		this.socket.on('connect', function (data) {
+		this.listen('connect', function (data) {
 			console.log(data.message);
 			this.sessionID = data.socketid;
 			var key = openpgp.generateKeyPair(1, 256, this.sessionID, this.sessionID);
@@ -20,10 +20,15 @@ Connection = {
 		});
 		this.listen('startChat', function (data) {
 			Users.addContact(data.name, data.pubKey);
+			console.log(data.name);
 		});
 		this.listen('error', function (data) {
 			console.error(data);
 		});
+	},
+
+	startChat : function (recipient) {
+		if(recipient) this.socket.emit('startChat', recipient);
 	},
 
 	listen : function( event, callback ) {

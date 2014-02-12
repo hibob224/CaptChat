@@ -42,12 +42,15 @@ io.sockets.on('connection', function (socket) {
 		};
 		listUsers();
 	});
-	socket.on('startChat', function (data) {
-		if (users.hasOwnProperty(data.recipient)) { //Check if the requested recipient is connected
+	socket.on('startChat', function (recipient) {
+		var data = {};
+		if (users.hasOwnProperty(recipient)) { //Check if the requested recipient is connected
 			data.name = getUserFromSocket(socket.id);
-			sendMessage(data.recipient, data, 'startChat');
+			console.log(data.name);
+			data.pubKey = users[data.name].pubKey;
+			sendMessage(recipient, data, 'startChat');
 		} else {
-			socket.emit('error', {err:'notConnected', message:'User \' ' + data.recipient + ' \' is not connected'});
+			socket.emit('error', {err:'notConnected', message:'User \'' + recipient + '\' is not connected'});
 		}
 	});
 	socket.on('message', function (data) {
@@ -79,7 +82,7 @@ function listUsers () {
 function getUserFromSocket (socket) {
 	for (var k in users) {
 		if (users.hasOwnProperty(k)) {
-			if (users[k] === socket) return k;
+			if (users[k].sessionid === socket) return k;
 		}
 	}
 	return false;
