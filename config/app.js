@@ -39,3 +39,14 @@ App.exp.use(express.logger('dev'));
 
 App.require("config/routes.js")(App.exp);
 App.require("config/chatSockets.js")(io);
+
+//MONGO DB CONNECTION THINGS
+if(App.env === 'openshift'){
+	App.mongoStr = "mongodb://" +
+		process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
+		process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
+		process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
+		process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
+		process.env.OPENSHIFT_APP_NAME;
+}
+App.require("config/database.js")(App.mongoStr);
