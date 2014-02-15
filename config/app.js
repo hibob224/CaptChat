@@ -36,6 +36,7 @@ App.exp.set('views', App.appPath('WebApp'));
 App.exp.set('view engine', 'jade');
 App.exp.use(express.static(App.appPath('WebApp/public')));
 App.exp.use(express.logger('dev'));
+App.exp.use(express.bodyParser());
 
 //MONGO DB CONNECTION THINGS
 if(App.env === 'openshift'){

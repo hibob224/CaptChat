@@ -1,0 +1,31 @@
+doctype html
+html
+	head
+		title CaptChat - Login
+		script(src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js")
+		script(src="scripts/jquery.form.js")
+		script.
+			$('.userRegister').ajaxForm({
+				beforeSubmit: function() {
+					return $('.regPass').val() == $('.repPass').val();
+				},
+				success: function(responseText, status, xhr, $form) {
+					if (status == 'success') alert('User added');
+				},
+				error: function(e) {
+					alert(e.responseText);
+				}
+			});
+	body
+		div.registerForm
+			form(method="post").userRegister
+				div.field-wrapper
+					label(for="regUser") Username:
+					input.regUser(name="regUser", type="text", autocomplete="off", size="15")
+				div.field-wrapper
+					label(for="regPass") Password:
+					input.regPass(name="regPass", type="password", size="15")
+				div.field-wrapper
+					label(for="repPass") Repeat:
+					input.repPass(type="password", size="15")
+				input.submit(type="submit", value="Register")
