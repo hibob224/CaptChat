@@ -9,17 +9,17 @@ module.exports = function(exp) {
 	});
 
 	exp.post('/register', function(req, res) { //Register form POST request
-		if (req.param('regUser') == null || req.param('regPass') == null) { //Missing field
+		if (req.param('regUser') === null || req.param('regPass') === null) { //Missing field
 			res.send('Registering requires both a username and password.', 400);
 		}
-		
+
 		var newUser = new User({
 			username: req.param('regUser'),
 			password: req.param('regPass')
 		});
 
 		User.findOne({username: newUser.username}, function(err, user) {
-			if (user) { 
+			if (user) {
 				res.send('User exists.', 400);
 			} else {
 				newUser.save(function(err) {

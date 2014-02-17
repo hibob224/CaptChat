@@ -1,4 +1,4 @@
-var env     = process.env.NODE_ENV || 'dev',
+var env     = process.env.NODE_ENV || process.env.OPENSHIFT_NODEJS_IP ? 'openshift' : 'dev',
 	path	= require('path'),
 	package = require('../package.json'),
 	express = require('express');
@@ -8,7 +8,7 @@ global.App = {
 	exp: express(),
 	port: process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 3000,
 	ip:   process.env.OPENSHIFT_NODEJS_IP   || process.env.IP   || "0.0.0.0",
-	env: env,
+	env:  env,
 	version: package.version,
 	mongoStr: 'mongodb://localhost:27017/captchat',
 	users: {},
