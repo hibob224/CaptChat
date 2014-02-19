@@ -8,6 +8,37 @@ module.exports = function(exp) {
 		res.render('register');
 	});
 
+	exp.get('/login', function(req, res) {
+		res.render('login');
+	});
+
+	exp.post('/login', function(req, res) {
+		if (req.param('user') === null || req.param('pass') === null) {
+			res.send('Missing username or password', 400);
+		}
+
+		User.getAuthenticated(req.param('user'), req.param('pass'), function(err, user, reason) {
+			if (err) throw err;
+
+			if (user) { //Login success
+				res.send('Login success (tho not really)', 200);
+				return;
+			}
+
+			//Login failed, display reason
+			var reasons = User.failedLogin;
+			switch (reason) {
+			case reasons.NOT_FOUND:
+			case reasons.PASSWORD_INCORRECT:
+				res.send('Username/Password Incorrect', 400);
+				break;
+			case reasons.MAX_ATTEMPTS:
+				res.send('Max Attempts');
+				break;
+			}
+		});
+	});
+
 	exp.post('/register', function(req, res) { //Register form POST request
 		if (req.param('regUser') === null || req.param('regPass') === null) { //Missing field
 			res.send('Registering requires both a username and password.', 400);

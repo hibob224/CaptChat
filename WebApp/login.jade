@@ -7,15 +7,15 @@ html
 		script.
 			$('.userLogin').ajaxForm({
 				success: function(responseText, status, xhr, $form) {
-					if (status == 'success') alert('User added');
+					if (status == 'success') alert(responseText);
 				},
 				error: function(e) {
 					alert(e.responseText);
 				}
 			});
 	body
-		.registerForm
-			form(method="post").userRegister
+		.loginForm
+			form(method="post").userLogin
 				.field-wrapper
 					label(for="user") Username:
 					input.user(required name="user", type="text", autocomplete="off", size="15")
