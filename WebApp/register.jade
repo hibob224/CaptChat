@@ -3,29 +3,20 @@ html
 	head
 		title CaptChat - Register
 		script(src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js")
-		script(src="scripts/jquery.form.js")
 		script.
-			$('.userRegister').ajaxForm({
-				beforeSubmit: function() {
-					return $('.regPass').val() == $('.repPass').val();
-				},
-				success: function(responseText, status, xhr, $form) {
-					if (status == 'success') alert('User added');
-				},
-				error: function(e) {
-					alert(e.responseText);
-				}
-			});
+			function checkPasses() {
+				return $('.password').val() === $('.repPassword').val();
+			}
 	body
 		.registerForm
-			form(method="post").userRegister
+			form(method="post", onsubmit='return checkPasses()').userRegister
 				.field-wrapper
-					label(for="regUser") Username:
-					input.regUser(required name="regUser", type="text", autocomplete="off", size="15")
+					label(for="username") Username:
+					input.username(required name="username", type="text", autocomplete="off", size="15")
 				.field-wrapper
-					label(for="regPass") Password:
-					input.regPass(required name="regPass", type="password", size="15")
+					label(for="password") Password:
+					input.password(required name="password", type="password", size="15")
 				.field-wrapper
-					label(for="repPass") Repeat:
-					input.repPass(required type="password", size="15")
-				input.submit(type="submit", value="Register")
+					label(for="repPassword") Repeat:
+					input.repPassword(required name="repPassword" type="password", size="15")
+				input.submit(type="submit", value="Register" )

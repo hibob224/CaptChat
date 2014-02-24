@@ -25,6 +25,27 @@ passport.use('local-login', new LocalStrategy(
 	}
 ));
 
+passport.use('local-signup', new LocalStrategy(
+	function (username, password, done) {
+		var newUser = new User({
+			username: username,
+			password: password
+		});
+
+		User.findOne({username: username}, function(err, user) {
+			if (user) {
+				return done(null, false, {message: 'User exists.'});
+			} else {
+				newUser.save(function(err) {
+					if (err) done(err);
+					return done(null, newUser);
+				});
+			}
+		});
+	}
+));
+
+
 passport.serializeUser(function(user, done) {
 	done(null, user.id);
 });
