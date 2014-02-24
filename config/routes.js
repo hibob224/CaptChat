@@ -16,6 +16,11 @@ module.exports = function(exp, passport) {
 		res.render('login');
 	});
 
+	exp.get('/logout', function (req, res) {
+		req.logout();
+		res.redirect('/login');
+	});
+
 	exp.post('/login', passport.authenticate('local-login', {
 		successRedirect:'/',
 		failureRedirect: '/login',
