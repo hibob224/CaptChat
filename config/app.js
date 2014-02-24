@@ -30,13 +30,28 @@ global.App = {
 
 var server = require('http').createServer(App.exp),
 	io     = require('socket.io').listen(server, {log: false});
+	var passport = App.require('config/passport.js');
 
 /* EXPRESS WEB FRAMEWORK MiddleWare BELOW */
 App.exp.set('views', App.appPath('WebApp'));
 App.exp.set('view engine', 'jade');
 App.exp.use(express.static(App.appPath('WebApp/public')));
 App.exp.use(express.logger('dev'));
+App.exp.use(express.cookieParser());
 App.exp.use(express.bodyParser());
+App.exp.use(express.session({secret: 'TappestKake'}));
+App.exp.use(function (req, res, next){
+	if ( req.method == 'POST' && req.url == '/login' ) {
+		if ( req.body.rememberme ) {
+			req.session.cookie.maxAge = 2592000000; // 30*24*60*60*1000 Rememeber 'me' for 30 days
+		} else {
+			req.session.cookie.expires = false;
+		}
+	}
+	next();
+});
+App.exp.use(passport.initialize());
+App.exp.use(passport.session());
 
 //MONGO DB CONNECTION THINGS
 if(App.env === 'openshift'){
@@ -50,7 +65,7 @@ if(App.env === 'openshift'){
 
 App.require("config/database.js")(App.mongoStr);
 User = App.require('models/user');
-App.require("config/routes.js")(App.exp);
+App.require("config/routes.js")(App.exp, passport);
 App.require("config/chatSockets.js")(io);
 
 var testUser = new User({

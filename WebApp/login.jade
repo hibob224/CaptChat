@@ -3,23 +3,13 @@ html
 	head
 		title CaptChat - Login
 		script(src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js")
-		script(src="scripts/jquery.form.js")
-		script.
-			$('.userLogin').ajaxForm({
-				success: function(responseText, status, xhr, $form) {
-					if (status == 'success') alert(responseText);
-				},
-				error: function(e) {
-					alert(e.responseText);
-				}
-			});
 	body
 		.loginForm
 			form(method="post").userLogin
 				.field-wrapper
-					label(for="user") Username:
-					input.user(required name="user", type="text", autocomplete="off", size="15")
+					label(for="username") Username:
+					input.username(required name="username", type="text", autocomplete="off", size="15")
 				.field-wrapper
-					label(for="pass") Password:
-					input.pass(required name="pass", type="password", size="15")
+					label(for="password") Password:
+					input.password(required name="password", type="password", size="15")
 				input.submit(type="submit", value="Log In")
