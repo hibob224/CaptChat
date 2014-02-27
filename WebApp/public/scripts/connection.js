@@ -25,6 +25,9 @@ Connection = {
 		this.listen('error', function (data) {
 			console.error(data);
 		});
+		this.listen('contacts', function (data) {
+			Users.contacts = data;
+		});
 	},
 
 	startChat : function (recipient) {
@@ -61,5 +64,9 @@ Connection = {
 			return;
 		}
 		this.socket.emit('pubKey', key);
+	},
+
+	requestContacts : function () {
+		this.socket.emit('requestContacts');
 	}
 };

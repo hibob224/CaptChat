@@ -46,6 +46,12 @@ module.exports = function(io){
 		socket.on('leaveRoom', function (room) {
 			socket.leave(room);
 		});
+		socket.on('requestContacts', function (user) { //CHANGE, DO NOT HAVE THIS PARAMETER
+			//Contact.findContactsOf(getUserFromSocket(socket), function (contacts) {
+			Contact.findContactsOf(user, function (contacts) {
+				socket.emit('contacts', contacts);
+			});
+		});
 	});
 
 	//This is for debugging, shows list of connected usersnames
