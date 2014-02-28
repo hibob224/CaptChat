@@ -26,6 +26,11 @@ global.App = {
 			console.log('Web Server Running on ' + App.ip + ':' + App.port);
 		}
 	},
+	stop: function() {
+		if(this.started){
+			//Do Shutdown things
+		}
+	}
 };
 
 var server = require('http').createServer(App.exp),
