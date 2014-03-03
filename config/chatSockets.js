@@ -10,13 +10,13 @@ module.exports = function(io, sessionStore, express){
 	}));
 
 	function onAuthorizeSuccess (data, accept) {
-		console.log('success: ', data.user.username);
+		console.log('success:', data.user.username);
 		accept(null, true);
 	}
 
 	function onAuthorizeFail (data, message, err, accept) {
 		if(err) throw new Error(message);
-		console.log('failed connection to socket.io: ', message);
+		console.log('failed connection to socket.io:', message);
 
 		accept(null, false);
 	}
@@ -24,7 +24,7 @@ module.exports = function(io, sessionStore, express){
 	/* SOCKET IO THINGS BELOW */
 	io.sockets.on('connection', function (socket) {
 		//Emit Connected message
-		socket.emit('connect', {message: 'Dies ist miene Wassamelone', socketid: socket.id});
+		socket.emit('connect', {message: 'Dies ist miene Wassamelone', socketid: socket.id, username: socket.handshake.user.username });
 
 		// Listeners
 		socket.on('disconnect', function (data){
@@ -38,8 +38,8 @@ module.exports = function(io, sessionStore, express){
 			}
 		});
 		socket.on('userInfo', function (data){
-			console.log(data.username + ' connected with SessionID: ' + socket.id);
-			App.users[data.username] = {
+			console.log(socket.handshake.user.username + ' connected with SessionID: ' + socket.id);
+			App.users[socket.handshake.user.username] = {
 				sessionid : socket.id,
 				pubKey : data.pubKey,
 			};

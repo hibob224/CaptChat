@@ -76,57 +76,15 @@ Contact = App.require('models/contacts');
 App.require("config/routes.js")(App.exp, passport);
 App.require("config/chatSockets.js")(io, sessionStore, express);
 
-var newContact = new Contact({
-	users: ['jim', 'bob']
-});
-newContact.save();
-newContact = new Contact({
-	users: ['jamal', 'jim']
-});
-newContact.save();
-newContact = new Contact({
-	users: ['bob', 'jamal']
-});
-newContact.save();
-
-/*var testUser = new User({
-	username: 'JAMAL',
-	password: 'Toblerone'
-});
-
-User.findOne({username: 'JAMAL'}, function(err, user) {
-	if(err) throw err;
-
-	if(user) {
-		console.log('User already there');
-	} else {
-		testUser.save(function(err) {
-			if (err) throw err;
-
-			// Attempt to authenticate user
-			User.getAuthenticated('JAMAL', 'Tyrone', function(err, user, reason) {
-				if (err) throw err;
-
-				// Login was successful if we have a user
-				if (user) {
-					// handle login success
-					console.log('login success');
-					return;
-				}
-
-				// Otherwise we can determine why we failed
-				var reasons = User.failedLogin;
-				switch (reason) {
-					case reasons.NOT_FOUND:
-					case reasons.PASSWORD_INCORRECT:
-						console.log('Username/Password Incorrect');
-						break;
-					case reasons.MAX_ATTEMPTS:
-						console.log('Max Attempts');
-						// Send email or otherwise notify user that account is temporarily locked
-						break;
-				}
-			});
-		});
-	}
-});*/
+// var newContact = new Contact({
+// 	users: ['jim', 'bob']
+// });
+// newContact.save();
+// newContact = new Contact({
+// 	users: ['jamal', 'jim']
+// });
+// newContact.save();
+// newContact = new Contact({
+// 	users: ['bob', 'jamal']
+// });
+// newContact.save();

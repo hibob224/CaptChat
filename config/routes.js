@@ -22,7 +22,7 @@ module.exports = function(exp, passport) {
 	});
 
 	exp.post('/login', passport.authenticate('local-login', {
-		successRedirect:'/',
+		successRedirect: '/',
 		failureRedirect: '/login',
 	}));
 

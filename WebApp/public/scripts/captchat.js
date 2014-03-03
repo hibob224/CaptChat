@@ -146,7 +146,7 @@ CaptChat = {
 Users = {
 	contacts: {},
 	self: {
-		username: 'user' + (new Date().getTime() / 1000).toString().split('.')[0],
+		username: '',
 		privateKey: {},
 		publicKey: {},
 	},

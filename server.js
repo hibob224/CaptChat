@@ -8,4 +8,3 @@ process.once('SIGUSR2', function () {
 });
 
 App.start();
-

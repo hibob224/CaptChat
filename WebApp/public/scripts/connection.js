@@ -6,10 +6,11 @@ Connection = {
 		this.socket = io.connect(connectionString + "");
 		this.listen('connect', function (data) {
 			console.log(data.message);
+			Users.self.username = data.username;
 			this.sessionID = data.socketid;
 			var key = openpgp.generateKeyPair(1, 256, this.sessionID, this.sessionID);
 			Users.addOwnKeys(key);
-			Connection.sendEvent('userInfo', {username: Users.self.username,pubKey:key.publicKeyArmored});
+			Connection.sendEvent('userInfo', {pubKey:key.publicKeyArmored});
 		});
 		this.listen('message', function (data) {
 			CaptChat.receiveMessage(data);
