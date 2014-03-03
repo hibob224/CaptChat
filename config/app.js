@@ -37,7 +37,20 @@ global.App = {
 var server = require('http').createServer(App.exp),
 	io     = require('socket.io').listen(server, {log: false});
 	passport = App.require('config/passport.js');
+
 var sessionStore = new MongoStore();
+
+//MONGO DB CONNECTION THINGS
+if(App.env === 'openshift'){
+	App.mongoStr = "mongodb://" +
+		process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
+		process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
+		process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
+		process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
+		process.env.OPENSHIFT_APP_NAME;
+	var customServer = new Server(process.env.OPENSHIFT_MONGODB_DB_HOST, process.env.OPENSHIFT_MONGODB_DB_PORT, { auto_reconnect: true });
+	sessionStore = new MongoStore({ server: customServer});
+}
 
 /* EXPRESS WEB FRAMEWORK MiddleWare BELOW */
 App.exp.set('views', App.appPath('WebApp'));
@@ -60,15 +73,6 @@ App.exp.use(function (req, res, next){
 App.exp.use(passport.initialize());
 App.exp.use(passport.session());
 
-//MONGO DB CONNECTION THINGS
-if(App.env === 'openshift'){
-	App.mongoStr = "mongodb://" +
-		process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
-		process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
-		process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
-		process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
-		process.env.OPENSHIFT_APP_NAME;
-}
 
 App.require("config/database.js")(App.mongoStr);
 User = App.require('models/user');
