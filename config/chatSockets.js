@@ -1,4 +1,26 @@
-module.exports = function(io){
+module.exports = function(io, sessionStore, express){
+	var passportSocketIo = require('passport.socketio');
+
+	io.set('authorization', passportSocketIo.authorize({
+		cookieParser: express.cookieParser,
+		secret: 'TappestKake',
+		store: sessionStore,
+		success: onAuthorizeSuccess,
+		fail: onAuthorizeFail
+	}));
+
+	function onAuthorizeSuccess (data, accept) {
+		console.log('success: ', data.user.username);
+		accept(null, true);
+	}
+
+	function onAuthorizeFail (data, message, err, accept) {
+		if(err) throw new Error(message);
+		console.log('failed connection to socket.io: ', message);
+
+		accept(null, false);
+	}
+
 	/* SOCKET IO THINGS BELOW */
 	io.sockets.on('connection', function (socket) {
 		//Emit Connected message

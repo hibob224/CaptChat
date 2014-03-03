@@ -36,7 +36,8 @@ global.App = {
 
 var server = require('http').createServer(App.exp),
 	io     = require('socket.io').listen(server, {log: false});
-	var passport = App.require('config/passport.js');
+	passport = App.require('config/passport.js');
+var sessionStore = new MongoStore();
 
 /* EXPRESS WEB FRAMEWORK MiddleWare BELOW */
 App.exp.set('views', App.appPath('WebApp'));
@@ -45,7 +46,7 @@ App.exp.use(express.static(App.appPath('WebApp/public')));
 App.exp.use(express.logger('dev'));
 App.exp.use(express.cookieParser());
 App.exp.use(express.bodyParser());
-App.exp.use(express.session({secret: 'TappestKake'}));
+App.exp.use(express.session({store: sessionStore, secret: 'TappestKake'}));
 App.exp.use(function (req, res, next){
 	if ( req.method == 'POST' && req.url == '/login' ) {
 		if ( req.body.rememberme ) {
@@ -73,7 +74,7 @@ App.require("config/database.js")(App.mongoStr);
 User = App.require('models/user');
 Contact = App.require('models/contacts');
 App.require("config/routes.js")(App.exp, passport);
-App.require("config/chatSockets.js")(io);
+App.require("config/chatSockets.js")(io, sessionStore, express);
 
 var newContact = new Contact({
 	users: ['jim', 'bob']
