@@ -15,6 +15,7 @@
     "passport": "~0.2.0",
     "passport-local": "~0.1.6",
     "socket.io": "~0.9.16",
-    "connect-mongo-store": "~0.1.8"
+    // "connect-mongo-store": "~0.1.8",
+    "express-session-mongo": "0.0.3"
   }
 }

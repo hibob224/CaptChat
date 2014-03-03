@@ -1,7 +1,8 @@
 var env     = process.env.NODE_ENV || process.env.OPENSHIFT_NODEJS_IP ? 'openshift' : 'dev',
 	path	= require('path'),
 	package = require('../package.json'),
-	express = require('express');
+	express = require('express'),
+	MongoStore = require('express-session-mongo');
 console.log('Loading app in '+ env + ' mode.');
 
 global.App = {
