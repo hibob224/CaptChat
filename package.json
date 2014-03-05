@@ -10,12 +10,12 @@
   "dependencies": {
     "bcrypt-nodejs": "~0.0.3",
     "express": "~3.4.8",
-    "express-session-mongo": "0.0.3",
     "jade": "~1.1.5",
     "mongoose": "~3.8.7",
     "passport": "~0.2.0",
     "passport-local": "~0.1.6",
     "passport.socketio": "~3.0.0",
-    "socket.io": "~0.9.16"
+    "socket.io": "~0.9.16",
+    "connect-mongo": "~0.4.0"
   }
 }

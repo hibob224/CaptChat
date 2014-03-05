@@ -2,7 +2,7 @@ var env     = process.env.NODE_ENV || process.env.OPENSHIFT_NODEJS_IP ? 'openshi
 	path	= require('path'),
 	package = require('../package.json'),
 	express = require('express'),
-	MongoStore = require('express-session-mongo');
+	MongoStore = require('connect-mongo')(express);
 console.log('Loading app in '+ env + ' mode.');
 
 global.App = {
@@ -38,7 +38,7 @@ var server = require('http').createServer(App.exp),
 	io     = require('socket.io').listen(server, {log: false});
 	passport = App.require('config/passport.js');
 
-var sessionStore = new MongoStore();
+var sessionStore = new MongoStore({ host:'localhost', port:27017, db: 'captchat' });
 
 //MONGO DB CONNECTION THINGS
 if(App.env === 'openshift'){
@@ -48,9 +48,10 @@ if(App.env === 'openshift'){
 		process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
 		process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
 		process.env.OPENSHIFT_APP_NAME;
-	var customServer = new Server(process.env.OPENSHIFT_MONGODB_DB_HOST, process.env.OPENSHIFT_MONGODB_DB_PORT, { auto_reconnect: true });
-	sessionStore = new MongoStore({ server: customServer});
+	sessionStore = new MongoStore({ url: App.mongoStr });
 }
+
+console.log(sessionStore);
 
 /* EXPRESS WEB FRAMEWORK MiddleWare BELOW */
 App.exp.set('views', App.appPath('WebApp'));
@@ -63,7 +64,7 @@ App.exp.use(express.session({store: sessionStore, secret: 'TappestKake'}));
 App.exp.use(function (req, res, next){
 	if ( req.method == 'POST' && req.url == '/login' ) {
 		if ( req.body.rememberme ) {
-			req.session.cookie.maxAge = 2592000000; // 30*24*60*60*1000 Rememeber 'me' for 30 days
+			req.session.cookie.maxAge = 86400000; // 24*60*60*1000 Rememeber 'me' for 24 hours
 		} else {
 			req.session.cookie.expires = false;
 		}

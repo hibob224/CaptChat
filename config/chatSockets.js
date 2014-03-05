@@ -15,7 +15,7 @@ module.exports = function(io, sessionStore, express){
 	}
 
 	function onAuthorizeFail (data, message, err, accept) {
-		if(err) throw new Error(message);
+		if(err) throw err;
 		console.log('failed connection to socket.io:', message);
 
 		accept(null, false);
