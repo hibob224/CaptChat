@@ -119,7 +119,7 @@ UserSchema.statics.getAuthenticated = function(username, password, cb) {
 };
 
 UserSchema.statics.addContact = function(user1, user2, cb) { //Add users to each others contacts (and remove from requests if present)
-	this.findOne({ username: user1 }, function (err, user) {
+	function addContact (err, user, user2) {
 		if (err) throw err;
 		if (user.contacts.indexOf(user2) === -1) {
 			if (user.requests.indexOf(user2) >= 0)  //Remove user2 from requests (if there)
@@ -130,19 +130,10 @@ UserSchema.statics.addContact = function(user1, user2, cb) { //Add users to each
 			user.contacts.push(user2);				//Add user2 to contacts
 			user.save();
 		}
-	});
-	this.findOne({ username: user2 }, function (err, user) {
-		if (err) throw err;
-		if (user.contacts.indexOf(user1) === -1) {
-			if (user.requests.indexOf(user1) >= 0)
-				user.requests.splice(user.requests.indexOf(user1), 1);
-			if (user.requesting.indexOf(user1) >= 0)
-				user.requesting.splice(user.requesting.indexOf(user1), 1);
+	}
 
-			user.contacts.push(user1);
-			user.save();
-		}
-	});
+	this.findOne({ username: user1 }, addContact(err, user, user2));
+	this.findOne({ username: user1 }, addContact(err, user, user1));
 };
 
 module.exports = mongoose.model('User', UserSchema);
