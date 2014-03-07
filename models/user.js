@@ -119,21 +119,23 @@ UserSchema.statics.getAuthenticated = function(username, password, cb) {
 };
 
 UserSchema.statics.addContact = function(user1, user2, cb) { //Add users to each others contacts (and remove from requests if present)
-	function addContact (err, user, user2) {
-		if (err) throw err;
-		if (user.contacts.indexOf(user2) === -1) {
-			if (user.requests.indexOf(user2) >= 0)  //Remove user2 from requests (if there)
-				user.requests.splice(user.requests.indexOf(user2), 1);
-			if (user.requesting.indexOf(user2) >= 0) //Remove user2 from requesting (if there)
-				user.requesting.splice(user.requesting.indexOf(user2), 1);
+	function addContact (user2) {
+		return function (err, user) {
+			if (err) throw err;
+			if (user.contacts.indexOf(user2) === -1) {
+				if (user.requests.indexOf(user2) >= 0)  //Remove user2 from requests (if there)
+					user.requests.splice(user.requests.indexOf(user2), 1);
+				if (user.requesting.indexOf(user2) >= 0) //Remove user2 from requesting (if there)
+					user.requesting.splice(user.requesting.indexOf(user2), 1);
 
-			user.contacts.push(user2);				//Add user2 to contacts
-			user.save();
-		}
+				user.contacts.push(user2);				//Add user2 to contacts
+				user.save();
+			}
+		};
 	}
 
-	this.findOne({ username: user1 }, function(err, user) { addContact(err, user, user2); });
-	this.findOne({ username: user2 }, function(err, user) { addContact(err, user, user1); });
+	this.findOne({ username: user1 }, addContact(user2));
+	this.findOne({ username: user2 }, addContact(user1));
 };
 
 module.exports = mongoose.model('User', UserSchema);
