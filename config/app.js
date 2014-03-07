@@ -51,8 +51,6 @@ if(App.env === 'openshift'){
 	sessionStore = new MongoStore({ url: App.mongoStr });
 }
 
-console.log(sessionStore);
-
 /* EXPRESS WEB FRAMEWORK MiddleWare BELOW */
 App.exp.set('views', App.appPath('WebApp'));
 App.exp.set('view engine', 'jade');
@@ -73,7 +71,6 @@ App.exp.use(function (req, res, next){
 });
 App.exp.use(passport.initialize());
 App.exp.use(passport.session());
-
 
 App.require("config/database.js")(App.mongoStr);
 User = App.require('models/user');
