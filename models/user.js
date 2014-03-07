@@ -132,8 +132,8 @@ UserSchema.statics.addContact = function(user1, user2, cb) { //Add users to each
 		}
 	}
 
-	this.findOne({ username: user1 }, addContact(err, user, user2));
-	this.findOne({ username: user2 }, addContact(err, user, user1));
+	this.findOne({ username: user1 }, function(err, user) { addContact(err, user, user2); });
+	this.findOne({ username: user2 }, function(err, user) { addContact(err, user, user1); });
 };
 
 module.exports = mongoose.model('User', UserSchema);
