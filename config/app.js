@@ -77,19 +77,5 @@ App.exp.use(passport.session());
 
 App.require("config/database.js")(App.mongoStr);
 User = App.require('models/user');
-Contact = App.require('models/contacts');
 App.require("config/routes.js")(App.exp, passport);
 App.require("config/chatSockets.js")(io, sessionStore, express);
-
-// var newContact = new Contact({
-// 	users: ['jim', 'bob']
-// });
-// newContact.save();
-// newContact = new Contact({
-// 	users: ['jamal', 'jim']
-// });
-// newContact.save();
-// newContact = new Contact({
-// 	users: ['bob', 'jamal']
-// });
-// newContact.save();

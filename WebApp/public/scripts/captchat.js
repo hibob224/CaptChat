@@ -1,3 +1,4 @@
+recipient = "";
 CaptChat = {
 	tCtx: {}, //Canvas context will be assigned here on page load
 	font: {},

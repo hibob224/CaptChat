@@ -25,6 +25,9 @@ module.exports = function(io, sessionStore, express){
 	io.sockets.on('connection', function (socket) {
 		//Emit Connected message
 		socket.emit('connect', {message: 'Dies ist miene Wassamelone', socketid: socket.id, username: socket.handshake.user.username });
+		socket.on('giveContacts', function (data){
+			App.users[getUserFromSocket(socket.id)].contacts = data;
+		});
 
 		// Listeners
 		socket.on('disconnect', function (data){
@@ -68,13 +71,19 @@ module.exports = function(io, sessionStore, express){
 		socket.on('leaveRoom', function (room) {
 			socket.leave(room);
 		});
-		socket.on('requestContacts', function (user) { //CHANGE, DO NOT HAVE THIS PARAMETER
-			//Contact.findContactsOf(getUserFromSocket(socket), function (contacts) {
-			Contact.findContactsOf(user, function (contacts) {
-				socket.emit('contacts', contacts);
-			});
+		//Request your contacts list, can't request for a specific user, just the one your socket is associated with.
+		socket.on('requestContacts', function (){
+			sendContacts(socket);
 		});
 	});
+
+	//Takes an entire socket, infers username from the socket, emits that sockets contacts
+	function sendContacts (socket) {
+		var user = getUserFromSocket(socket.id);
+		if( user ) {
+			socket.emit('contacts', App.users[user].contacts);
+		}
+	}
 
 	//This is for debugging, shows list of connected usersnames
 	function listUsers () {
@@ -88,10 +97,12 @@ module.exports = function(io, sessionStore, express){
 		return keys;
 	}
 
-	function getUserFromSocket (socket) {
+	//Takes a socketID not a socket (socket.id)
+	function getUserFromSocket (socketID) {
+		if (socketID.hasOwnProperty('id') ) { socketID = socketID.id; } //SocketID is an entire socket, not an ID
 		for (var k in App.users) {
 			if (App.users.hasOwnProperty(k)) {
-				if (App.users[k].sessionid === socket) return k;
+				if (App.users[k].sessionid === socketID) return k;
 			}
 		}
 		return false;

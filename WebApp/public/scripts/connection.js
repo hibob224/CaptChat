@@ -11,6 +11,7 @@ Connection = {
 			var key = openpgp.generateKeyPair(1, 256, this.sessionID, this.sessionID);
 			Users.addOwnKeys(key);
 			Connection.sendEvent('userInfo', {pubKey:key.publicKeyArmored});
+			Connection.giveContacts(['john', 'mary']);
 		});
 		this.listen('message', function (data) {
 			CaptChat.receiveMessage(data);
@@ -28,6 +29,7 @@ Connection = {
 		});
 		this.listen('contacts', function (data) {
 			Users.contacts = data;
+			console.log(Users.contacts);
 		});
 	},
 
@@ -69,5 +71,14 @@ Connection = {
 
 	requestContacts : function () {
 		this.socket.emit('requestContacts');
+	},
+
+	//Contacts should be an array of strings atm
+	sendContacts : function( contacts ){
+		if( !(contacts instanceof Array)) {
+			console.error("sendContacts(contacts) => Contacts != Array");
+			return;
+		}
+		this.socket.emit('giveContacts', contacts);
 	}
 };
