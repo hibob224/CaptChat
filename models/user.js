@@ -119,16 +119,16 @@ UserSchema.statics.getAuthenticated = function(username, password, cb) {
 };
 
 UserSchema.statics.addContact = function(user1, user2, cb) { //Add users to each others contacts (and remove from requests if present)
-	function addContact (user2) {
+	function addContact (userToAdd) {
 		return function (err, user) {
 			if (err) throw err;
-			if (user.contacts.indexOf(user2) === -1) {
-				if (user.requests.indexOf(user2) >= 0)  //Remove user2 from requests (if there)
-					user.requests.splice(user.requests.indexOf(user2), 1);
-				if (user.requesting.indexOf(user2) >= 0) //Remove user2 from requesting (if there)
-					user.requesting.splice(user.requesting.indexOf(user2), 1);
+			if (user.contacts.indexOf(userToAdd) === -1) {
+				if (user.requests.indexOf(userToAdd) >= 0)  //Remove userToAdd from requests (if there)
+					user.requests.splice(user.requests.indexOf(userToAdd), 1);
+				if (user.requesting.indexOf(userToAdd) >= 0) //Remove userToAdd from requesting (if there)
+					user.requesting.splice(user.requesting.indexOf(userToAdd), 1);
 
-				user.contacts.push(user2);				//Add user2 to contacts
+				user.contacts.push(userToAdd);				//Add userToAdd to contacts
 				user.save();
 			}
 		};
