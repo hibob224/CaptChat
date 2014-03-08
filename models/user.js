@@ -118,6 +118,34 @@ UserSchema.statics.getAuthenticated = function(username, password, cb) {
 	});
 };
 
+UserSchema.statics.sendRequest = function(requester, requestee, cb) {
+	this.find({$or: [{$and: [{username: requester}, {requesting: {$in:[requestee]}}]}, {$and: [{username:requestee},{requests: {$in:[requester]}}]}]}, function (err, users) {
+		if (err) throw err;
+
+		if (users.length != 0) {
+			cb('Request already exists.');
+		} else {
+			User.find({username: {$in: [requester, requestee]}}, function (err, users) {
+				if (err) throw err;
+				if (users.length != 2) {
+					return cb('Users not found.');
+				} else {
+					if (users[0].username == requester) {
+						users[0].requesting.push(requestee);
+						users[1].requests.push(requester);
+					} else {
+						users[1].requesting.push(requestee);
+						users[0].requests.push(requester);
+					}
+					users[0].save();
+					users[1].save();
+					return cb('Request sent');
+				}
+			});
+		}
+	});
+};
+
 UserSchema.statics.addContact = function(user1, user2, cb) { //Add users to each others contacts (and remove from requests if present)
 	function addContact (userToAdd) {
 		return function (err, user) {
@@ -141,7 +169,7 @@ UserSchema.statics.addContact = function(user1, user2, cb) { //Add users to each
 			cb('Request doesn\'t exist.');
 		} else {
 			User.findOne({ username: user1 }, addContact(user2));
-		User.findOne({ username: user2 }, addContact(user1));
+			User.findOne({ username: user2 }, addContact(user1));
 		}
 	});
 };

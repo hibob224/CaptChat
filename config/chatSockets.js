@@ -81,6 +81,12 @@ module.exports = function(io, sessionStore, express){
 				console.log(message);
 			});
 		});
+
+		socket.on('sendRequest', function(username) {
+			User.sendRequest(getUserFromSocket(socket.id), username, function(message) {
+				console.log(message);
+			});
+		});
 	});
 
 	//Takes an entire socket, infers username from the socket, emits that sockets contacts

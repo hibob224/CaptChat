@@ -84,5 +84,9 @@ Connection = {
 
 	acceptRequest : function (username) {
 		this.socket.emit('acceptRequest', username);
+	},
+
+	sendRequest : function (username) {
+		this.socket.emit('sendRequest', username);
 	}
 };
