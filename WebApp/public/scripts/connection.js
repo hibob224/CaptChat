@@ -4,15 +4,15 @@ Connection = {
 
 	connect : function( connectionString ) {
 		this.socket = io.connect(connectionString + "");
-		this.listen('connect', function ( data ) {
+		this.listen('connect', (function ( data ) {
 			console.log(data.message);
 			Users.self.username = data.username;
 			this.sessionID = data.socketid;
 			var key = openpgp.generateKeyPair(1, 256, this.sessionID, this.sessionID);
 			Users.addOwnKeys(key);
-			Connection.sendEvent('userInfo', {pubKey:key.publicKeyArmored});
-			Connection.sendContacts(['john', 'mary']);
-		});
+			this.sendEvent('userInfo', {pubKey:key.publicKeyArmored});
+			this.sendContacts(['john', 'mary']);
+		}).bind(this));
 		this.listen('message', function ( data ) {
 			CaptChat.receiveMessage( data );
 		});
@@ -34,7 +34,7 @@ Connection = {
 	},
 
 	startChat : function ( recipient ) {
-		this.socket.emit('startChat', recipient);
+		if( recipient ) this.socket.emit('startChat', recipient);
 	},
 
 	listen : function( event, callback ) {
