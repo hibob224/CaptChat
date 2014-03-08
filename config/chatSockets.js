@@ -75,6 +75,12 @@ module.exports = function(io, sessionStore, express){
 		socket.on('requestContacts', function (){
 			sendContacts(socket);
 		});
+
+		socket.on('acceptRequest', function(username) {
+			User.addContact(getUserFromSocket(socket.id), username, function(message) {
+				console.log(message);
+			});
+		});
 	});
 
 	//Takes an entire socket, infers username from the socket, emits that sockets contacts

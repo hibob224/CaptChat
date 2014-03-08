@@ -134,8 +134,16 @@ UserSchema.statics.addContact = function(user1, user2, cb) { //Add users to each
 		};
 	}
 
-	this.findOne({ username: user1 }, addContact(user2));
-	this.findOne({ username: user2 }, addContact(user1));
+	this.findOne({ username: user1, requests: { $in: [user2] }}, function(err, user) {
+		if (err) throw err;
+
+		if (!user) {
+			cb('Request doesn\'t exist.');
+		} else {
+			User.findOne({ username: user1 }, addContact(user2));
+		User.findOne({ username: user2 }, addContact(user1));
+		}
+	});
 };
 
 module.exports = mongoose.model('User', UserSchema);

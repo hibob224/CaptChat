@@ -76,5 +76,3 @@ App.require("config/database.js")(App.mongoStr);
 User = App.require('models/user');
 App.require("config/routes.js")(App.exp, passport);
 App.require("config/chatSockets.js")(io, sessionStore, express);
-
-User.addContact('hibob', 'bob');

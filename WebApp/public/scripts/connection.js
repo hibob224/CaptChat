@@ -80,5 +80,9 @@ Connection = {
 			return;
 		}
 		this.socket.emit('giveContacts', contacts);
+	},
+
+	acceptRequest : function (username) {
+		this.socket.emit('acceptRequest', username);
 	}
 };
