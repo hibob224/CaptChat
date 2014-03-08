@@ -119,6 +119,7 @@ UserSchema.statics.getAuthenticated = function(username, password, cb) {
 };
 
 UserSchema.statics.sendRequest = function(requester, requestee, cb) {
+	if( typeof cb !== 'function' ) cb = function(){};
 	this.find({$or: [{$and: [{username: requester}, {requesting: {$in:[requestee]}}]}, {$and: [{username:requestee},{requests: {$in:[requester]}}]}]}, function (err, users) {
 		if (err) throw err;
 
@@ -147,10 +148,12 @@ UserSchema.statics.sendRequest = function(requester, requestee, cb) {
 };
 
 UserSchema.methods.sendRequest = function(requestee, cb){
-	return(this.model('User').sendRequest(this.username, requestee, cb));
+	if( typeof cb !== 'function' ) cb = function(){};
+	this.model('User').sendRequest(this.username, requestee, cb);
 };
 
 UserSchema.statics.addContact = function(user1, user2, cb) { //Add users to each others contacts (and remove from requests if present)
+	if( typeof cb !== 'function' ) cb = function(){};
 	function addContact (userToAdd) {
 		return function (err, user) {
 			if (err) throw err;
@@ -179,7 +182,8 @@ UserSchema.statics.addContact = function(user1, user2, cb) { //Add users to each
 };
 
 UserSchema.methods.addContact = function(user2, cb) {
-	return(this.model('User').addContact(this.username, user2, cb));
+	if( typeof cb !== 'function' ) cb = function(){};
+	this.model('User').addContact(this.username, user2, cb);
 };
 
 module.exports = mongoose.model('User', UserSchema);

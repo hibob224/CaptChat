@@ -4,37 +4,37 @@ Connection = {
 
 	connect : function( connectionString ) {
 		this.socket = io.connect(connectionString + "");
-		this.listen('connect', function (data) {
+		this.listen('connect', function ( data ) {
 			console.log(data.message);
 			Users.self.username = data.username;
 			this.sessionID = data.socketid;
 			var key = openpgp.generateKeyPair(1, 256, this.sessionID, this.sessionID);
 			Users.addOwnKeys(key);
 			Connection.sendEvent('userInfo', {pubKey:key.publicKeyArmored});
-			Connection.giveContacts(['john', 'mary']);
+			Connection.sendContacts(['john', 'mary']);
 		});
-		this.listen('message', function (data) {
-			CaptChat.receiveMessage(data);
+		this.listen('message', function ( data ) {
+			CaptChat.receiveMessage( data );
 		});
-		this.listen('pubKey', function (data) {
+		this.listen('pubKey', function ( data ) {
 			console.log(data.key);
 			Users[data.user].key = data.key;
 		});
-		this.listen('startChat', function (data) {
+		this.listen('startChat', function ( data ) {
 			Users.addContact(data.name, data.pubKey);
 			console.log(data.name);
 		});
-		this.listen('error', function (data) {
-			console.error(data);
+		this.listen('error', function ( data ) {
+			console.error( data );
 		});
-		this.listen('contacts', function (data) {
+		this.listen('contacts', function ( data ) {
 			Users.contacts = data;
 			console.log(Users.contacts);
 		});
 	},
 
-	startChat : function (recipient) {
-		if(recipient) this.socket.emit('startChat', recipient);
+	startChat : function ( recipient ) {
+		this.socket.emit('startChat', recipient);
 	},
 
 	listen : function( event, callback ) {
@@ -79,14 +79,15 @@ Connection = {
 			console.error("sendContacts(contacts) => Contacts != Array");
 			return;
 		}
-		this.socket.emit('giveContacts', contacts);
+		//Only send an array of strings
+		this.socket.emit('giveContacts', contacts.filter(function(d){ return typeof d === 'string'; }));
 	},
 
-	acceptRequest : function (username) {
+	acceptRequest : function ( username ) {
 		this.socket.emit('acceptRequest', username);
 	},
 
-	sendRequest : function (username) {
+	sendRequest : function ( username ) {
 		this.socket.emit('sendRequest', username);
 	}
 };
