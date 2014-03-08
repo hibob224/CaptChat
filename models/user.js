@@ -122,7 +122,7 @@ UserSchema.statics.sendRequest = function(requester, requestee, cb) {
 	this.find({$or: [{$and: [{username: requester}, {requesting: {$in:[requestee]}}]}, {$and: [{username:requestee},{requests: {$in:[requester]}}]}]}, function (err, users) {
 		if (err) throw err;
 
-		if (users.length != 0) {
+		if (users.length !== 0) {
 			cb('Request already exists.');
 		} else {
 			User.find({username: {$in: [requester, requestee]}}, function (err, users) {
@@ -144,6 +144,10 @@ UserSchema.statics.sendRequest = function(requester, requestee, cb) {
 			});
 		}
 	});
+};
+
+UserSchema.methods.sendRequest = function(requestee, cb){
+	return(this.model('User').sendRequest(this.username, requestee, cb));
 };
 
 UserSchema.statics.addContact = function(user1, user2, cb) { //Add users to each others contacts (and remove from requests if present)
@@ -172,6 +176,10 @@ UserSchema.statics.addContact = function(user1, user2, cb) { //Add users to each
 			User.findOne({ username: user2 }, addContact(user1));
 		}
 	});
+};
+
+UserSchema.methods.addContact = function(user2, cb) {
+	return(this.model('User').addContact(this.username, user2, cb));
 };
 
 module.exports = mongoose.model('User', UserSchema);
