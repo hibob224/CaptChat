@@ -1,13 +1,15 @@
-doctype html
-html
-	head
-		title CaptChat - Register
-		script(src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js")
-		script.
-			function checkPasses() {
-				return $('.password').val() === $('.repPassword').val();
-			}
-	body
+extends layouts/index
+
+block headers
+	title CaptChat - Register
+	script(src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js")
+	script.
+		function checkPasses() {
+			return $('.password').val() === $('.repPassword').val();
+		}
+
+block content
+	.loginReg
 		.registerForm
 			form(method="post", onsubmit='return checkPasses()').userRegister
 				.field-wrapper

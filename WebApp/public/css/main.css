@@ -1,0 +1,65 @@
+/* Master Css */
+body {
+}
+.loginReg {
+	overflow: hidden;
+}
+.field-wrapper input {
+	border: none
+}
+.field-wrapper input:focus {
+	outline-color: #000;
+}
+.submit {
+	background-color: #fff;
+	border: 1px outset black;
+	width: 96%;
+	margin-left: 2px;
+}
+/* Login & Register */
+.loginForm, .registerForm {
+	top: 50%;
+	left: 50%;
+	width: 8em;
+	margin-left: -4em;
+	position: fixed;
+	padding: 10px;
+	background-color: #DDD;
+}
+.loginForm {
+	height: 7.25em;
+	margin-top: -3.625em;
+}
+.registerForm {
+	height: 10em;
+	margin-top: -5em;
+}
+
+/* Index */
+.chatBox {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 50px;
+}
+.messageWrapper {
+	position: static;
+}
+.aMessage {
+	float: left;
+	margin-right: auto;
+}
+.partnerMessage {
+	float: right;
+	margin-left: auto;
+	text-align: right;
+	margin-right: 20px;
+}
+.aMessage, .partnerMessage {
+	margin-top: 3px;
+	padding: 3px 5px 3px 5px;
+	max-width: 80%;
+	clear: both;
+	border: 1px solid grey;
+}

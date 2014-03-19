@@ -52,7 +52,7 @@ if(App.env === 'openshift'){
 }
 
 /* EXPRESS WEB FRAMEWORK MiddleWare BELOW */
-App.exp.set('views', App.appPath('WebApp'));
+App.exp.set('views', App.appPath('WebApp/views'));
 App.exp.set('view engine', 'jade');
 App.exp.use(express.static(App.appPath('WebApp/public')));
 App.exp.use(express.logger('dev'));

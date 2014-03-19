@@ -1,0 +1,38 @@
+extends layouts/index
+
+block headers
+	script(src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js")
+	script(src="/scripts/Font.js")
+	script(src="/socket.io/socket.io.js")
+	script(src="/scripts/openpgp.min.js")
+	script(src="/scripts/captchat.js")
+	script(src="/scripts/connection.js")
+	script.
+		var fontNames = ['moms']; //Add font name without file extension, must be .ttf
+		$((function() {
+			//Preloads font
+			CaptChat.tCtx = document.getElementById('textCanvas').getContext('2d');
+
+			for (var i = fontNames.length - 1; i >= 0; i--) {
+				var font = new Font();
+				font.src = '/fonts/' + fontNames[i] + '.ttf';
+				font.fontFamily = fontNames[i];
+				CaptChat.font = font;
+			}
+
+			Connection.connect(window.location.origin + (#{openshift} ? (window.location.protocol == 'http:' ? ':8000' : ':8443') : ''));
+		}));
+
+block content
+	div
+		.messageWrapper
+			.messages.js_messages
+		canvas#textCanvas(width=150, height=30)
+		br
+
+block feet
+	.chatBox
+		input#input(type="text", autocomplete="off" onkeypress="CaptChat.runScript(event)")
+		audio#notify
+			source(src="/sounds/notify.ogg" type="audio/ogg")
+			source(src="/sounds/notify.mp3" type="audio/mpeg")
