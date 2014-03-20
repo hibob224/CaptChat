@@ -1,38 +1,120 @@
 /* Master Css */
+html { overflow: hidden; }
 body {
+	font-family: sans-serif;
+	margin: 0
 }
-.loginReg {
-	overflow: hidden;
+header {
+	text-align: center;
+	margin-top: 0;
+	margin-bottom: 30px;
+	font-size: 70px;
 }
-.field-wrapper input {
-	border: none
+h1 { margin: 10px; }
+h2 {
+	font-size: 38pt;
+	text-align: center;
+	margin: 0;
 }
-.field-wrapper input:focus {
-	outline-color: #000;
+a {
+	color: #000;
+	text-decoration: none;
+	border-bottom: 1px solid black;
+}
+a:hover {
+	color: #FFF;
+	background: #787878;
+	border-bottom: 1px solid #787878;
 }
 .submit {
-	background-color: #fff;
-	border: 1px outset black;
-	width: 96%;
-	margin-left: 2px;
+	background-color: #27FF7D;
+	border: 0;
+	width: 125px;
+	height: 35px;
+	margin-top: 3px;
 }
-/* Login & Register */
-.loginForm, .registerForm {
-	top: 50%;
-	left: 50%;
-	width: 8em;
-	margin-left: -4em;
-	position: fixed;
-	padding: 10px;
-	background-color: #DDD;
+hr {
+	border: 0;
+	height: 2px;
+	width: 900px;
+	clear: left;
+	margin: 5px auto;
+
+	background-image: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
+	background-image:    -moz-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
+	background-image:     -ms-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
+	background-image:      -o-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
+	background-image:         linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
 }
-.loginForm {
-	height: 7.25em;
-	margin-top: -3.625em;
+input {
+	width: 162px;
+	clear: both;
+	padding: 3px;
+	padding-left: 8px;
+	border: 1px solid #787878;
 }
-.registerForm {
-	height: 10em;
-	margin-top: -5em;
+input:focus {
+	outline-color: black;
+}
+input:-webkit-autofill {
+	/*This removes the annoying autofill highlighting chrome and firefox (and maybe IE) add*/
+	-webkit-box-shadow: 0 0 0 1000px white inset;
+	   -moz-box-shadow: 0 0 0 1000px white inset;
+			box-shadow: 0 0 0 1000px white inset;
+}
+/* Changing highlighting colours
+Unfortunatly you must use individual selectors with these */
+::selection {
+	background: #000;
+	color: #FFF;
+}
+::-webkit-selection {
+	background: #000;
+	color: #FFF;
+}
+::-moz-selection {
+	background: #000;
+	color: #FFF;
+}
+::-webkit-validation-bubble-message {
+	color: #fff;
+	background: #000;
+	border-color: #444;
+	-webkit-box-shadow: 4px 4px 4px rgba(100,100,100,0.5);
+	   -moz-box-shadow: 4px 4px 4px rgba(100,100,100,0.5);
+	        box-shadow: 4px 4px 4px rgba(100,100,100,0.5);
+	-webkit-border-radius: 0;
+	   -moz-border-radius: 0;
+	        border-radius: 0;
+}
+::-webkit-validation-bubble-arrow {
+	background: #000;
+	border-color: #444;
+	-webkit-box-shadow: 0 0 0 0;
+       -moz-box-shadow: 0 0 0 0;
+    		box-shadow: 0 0 0 0;
+}
+.inputPage {
+	padding-top: 0;
+	width: 265px;
+	margin: 0 auto;
+}
+.inputPage p {
+	margin: 0 0 5px;
+	text-align: center;
+}
+.inputPage label, .inputPage input, .sbHolder { display: inline-block; }
+.inputPage label { width: 90px ; }
+.submit {
+	cursor: pointer;
+	width: 100%;
+	padding: 10px 20px;
+	background: #000;
+	color: #FFF;
+	font-weight: bolder;
+	font-size: 170%;
+	border: 0;
+	height: 53px;
 }
 
 /* Index */
@@ -43,18 +125,59 @@ body {
 	right: 0;
 	height: 50px;
 }
+#input {
+	position: fixed;
+	bottom: 0px;
+	left: 0px;
+	width: 100%;
+}
+.content {
+	height: 100vh;
+}
+.messages {
+	overflow: auto;
+	height: 100%;
+	float: right;
+}
 .messageWrapper {
-	position: static;
+	float: left;
+	width: 80%;
+	height: 97vh;
+	position: fixed;
+	background-color: #fff;
+}
+.tabs {
+	float: left;
+	width: 100%;
+	height: 5%;
+	border-bottom: 1px solid black;
+}
+.grabber {
+	cursor: pointer;
+	float: right;
+	width: 3px;
+	height: 100%;
+	background: #999999;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+.contacts {
+	overflow: auto;
+	float: right;
+	width: 20vw;
+	height: 97vh;
 }
 .aMessage {
 	float: left;
 	margin-right: auto;
+	margin-left: 5px;
 }
 .partnerMessage {
 	float: right;
 	margin-left: auto;
 	text-align: right;
-	margin-right: 20px;
+	margin-right: 5px;
 }
 .aMessage, .partnerMessage {
 	margin-top: 3px;

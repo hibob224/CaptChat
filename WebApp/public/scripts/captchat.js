@@ -1,19 +1,30 @@
 recipient = "";
+
+$(function() {
+	$('.grabber').click(function(){
+		var $messageWrapper = $('.messageWrapper');
+		$messageWrapper.animate({width: $messageWrapper.prop('style').width == '100%' ? '80%' : '100%'}, 800, 'easeOutCubic');
+	});
+
+	CaptChat.$js_messages = $('.js_messages');
+});
+
 CaptChat = {
 	tCtx: {}, //Canvas context will be assigned here on page load
 	font: {},
 	fontSize: 20,
+	$js_messages : $('.js_messages'),
 	runScript: function(e) {
 		if (e.keyCode == 13 && document.getElementById('input').value) {
 			switch(document.getElementById('input').value.split(' ', 1)[0]) {
 				case '/cls': //Clear messages
-					$('.js_messages').empty();
+					$js_messages.empty();
 					break;
 				default:
 					this.doTheThing();
-					$('.js_messages').append('<br/>'); //New line between messages
-					$('.js_messages').animate({ scrollTop: $('.js_messages').prop('scrollHeight') }, 400, 'swing', function() {
-										$('.js_messages').stop(); //Stop scroll to prevent it affecting user scrolling
+					$js_messages.append('<br/>'); //New line between messages
+					$js_messages.animate({ scrollTop: $js_messages.prop('scrollHeight') }, 400, 'swing', function() {
+										$js_messages.stop(); //Stop scroll to prevent it affecting user scrolling
 									});
 					break;
 			}
@@ -42,7 +53,7 @@ CaptChat = {
 		}
 
 		Connection.sendMessage({user: recipient, message: JSON.stringify(dataUrlMessage)}); //Stringify array and send to server
-		$('.js_messages').append(message);
+		$js_messages.append(message);
 	},
 
 	captchaIfy: function(input) {
@@ -92,9 +103,9 @@ CaptChat = {
 			var img = $('<img/>', { src: message[i] });
 			messageSpan.append(img);
 		}
-		$('.js_messages').append(messageSpan);
-		$('.js_messages').animate({ scrollTop: $('.js_messages').outerHeight() }, 400, 'swing', function() {
-							$('.js_messages').stop(); //Stop scroll to prevent it affecting user scrolling
+		$js_messages.append(messageSpan);
+		$js_messages.animate({ scrollTop: $js_messages.outerHeight() }, 400, 'swing', function() {
+							$js_messages.stop(); //Stop scroll to prevent it affecting user scrolling
 						});
 		if (!document.hasFocus()) {
 			$('#notify').get(0).play();

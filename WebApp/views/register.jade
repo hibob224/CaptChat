@@ -9,16 +9,20 @@ block headers
 		}
 
 block content
-	.loginReg
+	.inputPage
 		.registerForm
+			h2 Register
+			p
+				| Return to&thinsp;
+				a(href='/login') Login
 			form(method="post", onsubmit='return checkPasses()').userRegister
-				.field-wrapper
-					label(for="username") Username:
-					input.username(required name="username", type="text", autocomplete="off", size="15")
-				.field-wrapper
-					label(for="password") Password:
-					input.password(required name="password", type="password", size="15")
-				.field-wrapper
-					label(for="repPassword") Repeat:
-					input.repPassword(required name="repPassword" type="password", size="15")
+				label(for="username") Username:
+				input.username(required name="username", type="text", autocomplete="off", size="15")
+				br
+				label(for="password") Password:
+				input.password(required name="password", type="password", size="15")
+				br
+				label(for="repPassword") Repeat:
+				input.repPassword(required name="repPassword" type="password", size="15")
+				br
 				input.submit(type="submit", value="Register" )
