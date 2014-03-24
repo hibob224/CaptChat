@@ -24,7 +24,7 @@ CaptChat = {
 					this.doTheThing();
 					this.$js_messages.append('<br/>'); //New line between messages
 					this.$js_messages.animate({ scrollTop: this.$js_messages.prop('scrollHeight') }, 400, 'swing', function() {
-										this.$js_messages.stop(); //Stop scroll to prevent it affecting user scrolling
+										$(this).stop(); //Stop scroll to prevent it affecting user scrolling
 									});
 					break;
 			}
@@ -104,9 +104,9 @@ CaptChat = {
 			messageSpan.append(img);
 		}
 		this.$js_messages.append(messageSpan);
-		this.$js_messages.animate({ scrollTop: this.$js_messages.outerHeight() }, 400, 'swing', function() {
-							this.$js_messages.stop(); //Stop scroll to prevent it affecting user scrolling
-						});
+		this.$js_messages.animate({ scrollTop: this.$js_messages.prop('scrollHeight') }, 400, 'swing', function() {
+										$(this).stop(); //Stop scroll to prevent it affecting user scrolling
+									});
 		if (!document.hasFocus()) {
 			$('#notify').get(0).play();
 		}

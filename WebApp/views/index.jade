@@ -25,13 +25,20 @@ block headers
 		}));
 
 block content
-	div.content
+	.content
 		.messageWrapper
 			.tabs
 				.tab
+					span.tabName pl0x
+				.tab.selected
+					span.tabName hibob
+				.tab
+					span.tabName random
+				.tab.empty
+					span .   
 			.messages.js_messages
-			.chatBox
-				input#input(type="text", autocomplete="off" onkeypress="CaptChat.runScript(event)")
+			
+			input#input.chatBox(type="text", autocomplete="off" onkeypress="CaptChat.runScript(event)")
 			.grabber
 		.contacts
 			.contact
