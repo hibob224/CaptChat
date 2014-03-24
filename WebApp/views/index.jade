@@ -28,11 +28,18 @@ block content
 	div.content
 		.messageWrapper
 			.tabs
+				.tab
 			.messages.js_messages
 			.chatBox
 				input#input(type="text", autocomplete="off" onkeypress="CaptChat.runScript(event)")
 			.grabber
 		.contacts
+			.contact
+				img.icon.contactInfo(src="https://s3.amazonaws.com/uifaces/faces/twitter/calebogden/128.jpg")
+				span.name.contactInfo pl0x
+			.contact
+				img.icon.contactInfo(src="https://s3.amazonaws.com/uifaces/faces/twitter/tomaslau/128.jpg")
+				span.name.contactInfo hibob
 		br
 block feet
 	canvas#textCanvas(width=150, height=30)

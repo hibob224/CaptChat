@@ -149,15 +149,20 @@ Unfortunatly you must use individual selectors with these */
 .messageWrapper {
 	float: left;
 	width: 80%;
-	height: 97vh;
+	height: 100vh;
 	position: fixed;
 	background-color: #fff;
 }
 .tabs {
 	float: left;
 	width: 100%;
-	height: 5vh;
+	height: 25px;
 	border-bottom: 1px solid black;
+}
+.tab {
+	height: inherit;
+	width: 10vw;
+	border-right: 1px solid black;
 }
 .grabber {
 	cursor: pointer;
@@ -173,7 +178,22 @@ Unfortunatly you must use individual selectors with these */
 	overflow: auto;
 	float: right;
 	width: 20vw;
-	height: 97vh;
+	height: 100vh;
+}
+.contact {
+	display: inline-block;
+	width: inherit;
+	height: 50px;
+	border-bottom: 1px solid black;
+}
+.contact .contactInfo {
+	display: inline-block;
+	vertical-align: middle;
+}
+.contact .icon {
+	height: 40px;
+	margin: 5px;
+	vertical-align: middle;
 }
 .aMessage {
 	float: left;
