@@ -18,13 +18,13 @@ CaptChat = {
 		if (e.keyCode == 13 && document.getElementById('input').value) {
 			switch(document.getElementById('input').value.split(' ', 1)[0]) {
 				case '/cls': //Clear messages
-					$js_messages.empty();
+					this.$js_messages.empty();
 					break;
 				default:
 					this.doTheThing();
-					$js_messages.append('<br/>'); //New line between messages
-					$js_messages.animate({ scrollTop: $js_messages.prop('scrollHeight') }, 400, 'swing', function() {
-										$js_messages.stop(); //Stop scroll to prevent it affecting user scrolling
+					this.$js_messages.append('<br/>'); //New line between messages
+					this.$js_messages.animate({ scrollTop: this.$js_messages.prop('scrollHeight') }, 400, 'swing', function() {
+										this.$js_messages.stop(); //Stop scroll to prevent it affecting user scrolling
 									});
 					break;
 			}
@@ -53,7 +53,7 @@ CaptChat = {
 		}
 
 		Connection.sendMessage({user: recipient, message: JSON.stringify(dataUrlMessage)}); //Stringify array and send to server
-		$js_messages.append(message);
+		this.$js_messages.append(message);
 	},
 
 	captchaIfy: function(input) {
@@ -103,9 +103,9 @@ CaptChat = {
 			var img = $('<img/>', { src: message[i] });
 			messageSpan.append(img);
 		}
-		$js_messages.append(messageSpan);
-		$js_messages.animate({ scrollTop: $js_messages.outerHeight() }, 400, 'swing', function() {
-							$js_messages.stop(); //Stop scroll to prevent it affecting user scrolling
+		this.$js_messages.append(messageSpan);
+		this.$js_messages.animate({ scrollTop: this.$js_messages.outerHeight() }, 400, 'swing', function() {
+							this.$js_messages.stop(); //Stop scroll to prevent it affecting user scrolling
 						});
 		if (!document.hasFocus()) {
 			$('#notify').get(0).play();

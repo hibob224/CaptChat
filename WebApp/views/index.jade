@@ -29,13 +29,13 @@ block content
 		.messageWrapper
 			.tabs
 			.messages.js_messages
+			.chatBox
+				input#input(type="text", autocomplete="off" onkeypress="CaptChat.runScript(event)")
 			.grabber
 		.contacts
-		canvas#textCanvas(width=150, height=30)
 		br
-	.chatBox
-		input#input(type="text", autocomplete="off" onkeypress="CaptChat.runScript(event)")
-		audio#notify
-			source(src="/sounds/notify.ogg" type="audio/ogg")
-			source(src="/sounds/notify.mp3" type="audio/mpeg")
 block feet
+	canvas#textCanvas(width=150, height=30)
+	audio#notify
+		source(src="/sounds/notify.ogg" type="audio/ogg")
+		source(src="/sounds/notify.mp3" type="audio/mpeg")

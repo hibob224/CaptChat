@@ -56,6 +56,9 @@ input {
 input:focus {
 	outline-color: black;
 }
+.chatBox input:focus {
+	outline: none;
+}
 input:-webkit-autofill {
 	/*This removes the annoying autofill highlighting chrome and firefox (and maybe IE) add*/
 	-webkit-box-shadow: 0 0 0 1000px white inset;
@@ -122,21 +125,25 @@ Unfortunatly you must use individual selectors with these */
 	position: fixed;
 	bottom: 0;
 	left: 0;
-	right: 0;
-	height: 50px;
+	height: 5vh;
+	width: inherit;
 }
 #input {
 	position: fixed;
 	bottom: 0px;
 	left: 0px;
-	width: 100%;
+	width: inherit;
+	box-sizing: border-box;
+	border: 0;
+	border-top: 1px solid black;
 }
 .content {
 	height: 100vh;
 }
 .messages {
 	overflow: auto;
-	height: 100%;
+	height: 90vh;
+	width: 100%;
 	float: right;
 }
 .messageWrapper {
@@ -149,14 +156,14 @@ Unfortunatly you must use individual selectors with these */
 .tabs {
 	float: left;
 	width: 100%;
-	height: 5%;
+	height: 5vh;
 	border-bottom: 1px solid black;
 }
 .grabber {
 	cursor: pointer;
 	float: right;
 	width: 3px;
-	height: 100%;
+	height: 100vh;
 	background: #999999;
 	position: absolute;
 	top: 0;
