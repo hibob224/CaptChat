@@ -181,6 +181,16 @@ UserSchema.statics.addContact = function(user1, user2, cb) { //Add users to each
 	});
 };
 
+UserSchema.statics.getContacts = function(name, cb) {
+	this.findOne({ username: name }, function(err, user) {
+		if (err) throw err;
+
+		if (user) {
+			cb(user.contacts);
+		}
+	});
+};
+
 UserSchema.methods.addContact = function(user2, cb) {
 	if( typeof cb !== 'function' ) cb = function(){};
 	this.model('User').addContact(this.username, user2, cb);

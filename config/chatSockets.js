@@ -117,7 +117,9 @@ module.exports = function(io, sessionStore, express){
 		}
 		//Emits this socket's contacts
 		function sendContacts () {
-			socket.emit('contacts', App.users[socket.handshake.user.username].contacts);
+			User.getContacts(socket.handshake.user.username, function (contacts) {
+				socket.emit('contacts', contacts);
+			});
 		}
 	});
 

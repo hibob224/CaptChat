@@ -119,6 +119,12 @@ Unfortunatly you must use individual selectors with these */
 	border: 0;
 	height: 53px;
 }
+.logo {
+    height: 40vw;
+    max-height: 50%;
+    margin: auto;
+    display: block;
+}
 
 /* Index */
 .chatBox {
@@ -215,6 +221,9 @@ Unfortunatly you must use individual selectors with these */
 	position: absolute;
 	top: 0;
 	right: 0;
+}
+.largeGrabber {
+	width: 5px;
 }
 .contacts {
 	overflow: auto;

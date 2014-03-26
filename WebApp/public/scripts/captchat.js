@@ -4,6 +4,7 @@ $(function() {
 	$('.grabber').click(function(){
 		var $messageWrapper = $('.messageWrapper');
 		$messageWrapper.animate({width: $messageWrapper.prop('style').width == '100%' ? '80%' : '100%'}, 800, 'easeOutCubic');
+		$(this).toggleClass('largeGrabber');
 	});
 
 	CaptChat.$js_messages = $('.js_messages');
@@ -19,6 +20,13 @@ CaptChat = {
 			switch(document.getElementById('input').value.split(' ', 1)[0]) {
 				case '/cls': //Clear messages
 					this.$js_messages.empty();
+					break;
+				case '/add':
+					Connection.sendRequest(document.getElementById('input').value.substring(5).trim());
+					console.log('Request send');
+					break;
+				case '/accept':
+					Connection.acceptRequest(document.getElementById('input').value.substring(8).trim());
 					break;
 				default:
 					this.doTheThing();
@@ -85,7 +93,6 @@ CaptChat = {
 		var fMin = this.fontSize - 2;
 		this.tCtx.strokeStyle = "#000000";
 		for (var j = 0; j < input.length; j++) {
-
 			var fontSize = Math.floor(Math.random()*(fMax - fMin + 1) + fMin );
 			var fontNum = Math.floor(Math.random() * ((fontNames.length-1) - 0 + 1) + 0);
 			this.tCtx.font = "normal "+ fontSize +"px " + fontNames[fontNum];
@@ -110,6 +117,19 @@ CaptChat = {
 		if (!document.hasFocus()) {
 			$('#notify').get(0).play();
 		}
+	},
+
+	startConvo: function(username) {
+		var tab = $('<div/>').addClass('tab').append($(document.createElement('span')).addClass('tabName').html(username));
+		// $('.empty').before(tab);
+		$('.tabs').append(tab);
+	},
+
+	addToContacts: function(username, image) {
+		var contact = $('<div/>').addClass('contact');
+		contact.append($(document.createElement('img')).addClass('contactInfo icon').attr('src', image));
+		contact.append($(document.createElement('span')).addClass('contactInfo name').html(username));
+		$('.contacts').append(contact);
 	},
 
 	canvas: {

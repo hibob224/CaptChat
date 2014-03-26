@@ -58,17 +58,7 @@ App.exp.use(express.static(App.appPath('WebApp/public')));
 App.exp.use(express.logger('dev'));
 App.exp.use(express.cookieParser());
 App.exp.use(express.bodyParser());
-App.exp.use(express.session({store: sessionStore, secret: 'TappestKake'}));
-App.exp.use(function (req, res, next){
-	if ( req.method == 'POST' && req.url == '/login' ) {
-		if ( req.body.rememberme ) {
-			req.session.cookie.maxAge = 86400000; // 24*60*60*1000 Rememeber 'me' for 24 hours
-		} else {
-			req.session.cookie.expires = false;
-		}
-	}
-	next();
-});
+App.exp.use(express.session({store: sessionStore, secret: 'TappestKake', cookie: { maxAge: 86400000 }}));
 App.exp.use(passport.initialize());
 App.exp.use(passport.session());
 

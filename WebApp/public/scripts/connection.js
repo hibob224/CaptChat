@@ -11,7 +11,7 @@ Connection = {
 			var key = openpgp.generateKeyPair(1, 256, this.sessionID, this.sessionID);
 			Users.addOwnKeys(key);
 			this.sendEvent('userInfo', {pubKey:key.publicKeyArmored});
-			this.sendContacts(['john', 'mary']);
+			this.requestContacts();
 		}).bind(this));
 		this.listen('message', function ( data ) {
 			CaptChat.receiveMessage( data );
@@ -29,7 +29,10 @@ Connection = {
 		});
 		this.listen('contacts', function ( data ) {
 			Users.contacts = data;
-			console.log(Users.contacts);
+			$('.contacts').empty();
+			for (var index in data) {
+				CaptChat.addToContacts(data[index], 'https://s3.amazonaws.com/uifaces/faces/twitter/rude/128.jpg');
+			}
 		});
 	},
 
