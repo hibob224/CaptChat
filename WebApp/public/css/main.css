@@ -153,7 +153,7 @@ Unfortunatly you must use individual selectors with these */
 .content {
 	height: 100vh;
 }
-.messages {
+.js_messages {
 	overflow: auto;
 	height: 90vh;
 	width: 100%;
@@ -276,4 +276,7 @@ Unfortunatly you must use individual selectors with these */
 	max-width: 80%;
 	clear: both;
 	border: 1px solid grey;
+}
+.hidden {
+	visibility: hidden;
 }

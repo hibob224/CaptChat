@@ -7,19 +7,37 @@ $(function() {
 		$(this).toggleClass('largeGrabber');
 	});
 
-	CaptChat.$js_messages = $('.js_messages');
+	$('.contacts').click(function(e) {
+		if ($(e.target).is(".contact")) {
+			CaptChat.startConvo($(e.target).find('.name').html());
+			CaptChat.selectConvo($(e.target).find('.name').html());
+		} else if ($(e.target).is(".name")) {
+			CaptChat.startConvo($(e.target).html());
+			CaptChat.selectConvo($(e.target).html());
+		} else if ($(e.target).is(".icon")) {
+			CaptChat.startConvo($(e.target).next().html());
+			CaptChat.selectConvo($(e.target).next().html());
+		}
+	});
+
+	$('.tabs').click(function(e) { //Adding click event to container means we don't have to rebind the click event on every tab we add
+		if ($(e.target).is('.tab') && !($(e.target).is('.empty'))) { //User clicked on tab
+			CaptChat.selectConvo($(e.target).find('.tabName').html());
+		} else if ($(e.target).is('.tabName')) {	//User clicked on name
+			CaptChat.selectConvo($(e.target).html());
+		}
+	});
 });
 
 CaptChat = {
 	tCtx: {}, //Canvas context will be assigned here on page load
 	font: {},
 	fontSize: 20,
-	$js_messages : $('.js_messages'),
 	runScript: function(e) {
-		if (e.keyCode == 13 && document.getElementById('input').value) {
+		if (e.which == 13 && document.getElementById('input').value) {
 			switch(document.getElementById('input').value.split(' ', 1)[0]) {
 				case '/cls': //Clear messages
-					this.$js_messages.empty();
+					$('.messages-' + recipient).empty();
 					break;
 				case '/add':
 					Connection.sendRequest(document.getElementById('input').value.substring(5).trim());
@@ -30,8 +48,8 @@ CaptChat = {
 					break;
 				default:
 					this.doTheThing();
-					this.$js_messages.append('<br/>'); //New line between messages
-					this.$js_messages.animate({ scrollTop: this.$js_messages.prop('scrollHeight') }, 400, 'swing', function() {
+					$('.messages-' + recipient).append('<br/>'); //New line between messages
+					$('.messages-' + recipient).animate({ scrollTop: $('.messages-' + recipient).prop('scrollHeight') }, 400, 'swing', function() {
 										$(this).stop(); //Stop scroll to prevent it affecting user scrolling
 									});
 					break;
@@ -61,7 +79,7 @@ CaptChat = {
 		}
 
 		Connection.sendMessage({user: recipient, message: JSON.stringify(dataUrlMessage)}); //Stringify array and send to server
-		this.$js_messages.append(message);
+		$('.messages-' + recipient).append(message);
 	},
 
 	captchaIfy: function(input) {
@@ -103,15 +121,20 @@ CaptChat = {
 		}
 	},
 
-	receiveMessage: function(message) { //Displays messages received from other people. Send JSON strinified array of dataURLS
-		message = JSON.parse(message);
+	receiveMessage: function(data) { //Displays messages received from other people. Send JSON strinified array of dataURLS
+		message = JSON.parse(data.message);
 		var messageSpan = $('<span/>', { class: 'partnerMessage' });
 		for (var i=0;i<message.length;i++) {
 			var img = $('<img/>', { src: message[i] });
 			messageSpan.append(img);
 		}
-		this.$js_messages.append(messageSpan);
-		this.$js_messages.animate({ scrollTop: this.$js_messages.prop('scrollHeight') }, 400, 'swing', function() {
+		var messageWindow = $('.messages-' + data.from);
+		if (!($('.messages-' + data.from)[0])) {
+			CaptChat.startConvo(data.from);
+			messageWindow = $('.messages-' + data.from);
+		}
+		messageWindow.append(messageSpan);
+		messageWindow.animate({ scrollTop: messageWindow.prop('scrollHeight') }, 400, 'swing', function() {
 										$(this).stop(); //Stop scroll to prevent it affecting user scrolling
 									});
 		if (!document.hasFocus()) {
@@ -120,9 +143,23 @@ CaptChat = {
 	},
 
 	startConvo: function(username) {
-		var tab = $('<div/>').addClass('tab').append($(document.createElement('span')).addClass('tabName').html(username));
-		// $('.empty').before(tab);
-		$('.tabs').append(tab);
+		if (!($('.messages-' + username)[0])) {
+			var tab = $('<div/>').addClass('tab tab-' + username).append($(document.createElement('span')).addClass('tabName').html(username));
+			$('.empty').before(tab);
+			var messageWindow = $('<div/>', { class: 'messages-' + username + ' js_messages hidden'});
+			$('.tabs').after(messageWindow);
+			// $('.tabs').append(tab);
+		}
+	},
+
+	selectConvo: function(username) {
+		if ($('.messages-' + username)[0]) {
+			recipient = username;
+			$('.selected').removeClass('selected');
+			$('.tab-' + username).addClass('selected');
+			$('.js_messages').addClass('hidden');
+			$('.messages-' + username).removeClass('hidden');
+		}
 	},
 
 	addToContacts: function(username, image) {
@@ -170,7 +207,7 @@ CaptChat = {
 	},
 
 	appendImg: function(img) {
-		var messages = document.getElementByClassName('messages');
+		var messages = document.getElementByClassName('messages-' + recipient);
 		messages.appendChild(img);
 	},
 };

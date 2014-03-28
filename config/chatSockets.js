@@ -77,7 +77,10 @@ module.exports = function(io, sessionStore, express){
 			if( typeof data === 'object' && data ) {
 				if( typeof data.message === 'string' || typeof data.user === 'string' ) {
 					if (App.users.hasOwnProperty(data.user)) {
-						sendMessage(data.user, data.message);
+						var message = {};
+						message.message = data.message;
+						message.from	= socket.handshake.user.username;
+						sendMessage(data.user, message);
 					} else { sendError('message', 'Recipient not connected'); }
 					return;
 				} else { sendError('message', 'Data object sent with incorrect message/user'); }
