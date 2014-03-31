@@ -37,6 +37,7 @@ hr {
 	border: 0;
 	height: 2px;
 	max-width: 900px;
+	min-width: 270px;
 	width: 70vw;
 	clear: left;
 	margin: 5px auto;
@@ -123,6 +124,7 @@ Unfortunatly you must use individual selectors with these */
 .logo {
     height: 40vw;
     max-height: 50%;
+    max-height: 13%;
     margin: auto;
     display: block;
 }
