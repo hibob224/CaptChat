@@ -278,5 +278,5 @@ Unfortunatly you must use individual selectors with these */
 	border: 1px solid grey;
 }
 .hidden {
-	visibility: hidden;
+	display: none;
 }
