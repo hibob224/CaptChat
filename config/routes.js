@@ -9,11 +9,11 @@ module.exports = function(exp, passport) {
 	});
 
 	exp.get('/register', function (req, res) { //Regular register page request
-		res.render('register');
+		res.render('logReg', {view: 'register'} );
 	});
 
 	exp.get('/login', function (req, res) {
-		res.render('login');
+		res.render('logReg', {view: 'login'} );
 	});
 
 	exp.get('/logout', function (req, res) {
