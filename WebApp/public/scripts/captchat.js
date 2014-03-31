@@ -78,7 +78,11 @@ CaptChat = {
 			i++;
 		}
 
-		Connection.sendMessage({user: recipient, message: JSON.stringify(dataUrlMessage)}); //Stringify array and send to server
+		//JSON stringify then encrypt using recipients public key
+		var encryptedMessage = JSON.stringify(dataUrlMessage);
+		encryptedMessage = openpgp.encryptMessage([Users.contacts[recipient]], encryptedMessage);
+
+		Connection.sendMessage({user: recipient, message: encryptedMessage}); //Stringify array and send to server
 		$('.messages-' + recipient).append(message);
 	},
 
@@ -121,8 +125,11 @@ CaptChat = {
 		}
 	},
 
-	receiveMessage: function(data) { //Displays messages received from other people. Send JSON strinified array of dataURLS
-		message = JSON.parse(data.message);
+	receiveMessage: function(data) { //Displays messages received from other people. Send encrypted JSON strinified array of dataURLS
+		//Decrypt using private key and parse the JSON
+		var message = openpgp.decryptMessage(Users.self.privateKey, openpgp.message.readArmored(data.message));
+		message = JSON.parse(message);
+
 		var messageSpan = $('<span/>', { class: 'partnerMessage' });
 		for (var i=0;i<message.length;i++) {
 			var img = $('<img/>', { src: message[i] });
@@ -143,12 +150,12 @@ CaptChat = {
 	},
 
 	startConvo: function(username) {
+		Connection.sendEvent( 'reqKey', username );
 		if (!($('.messages-' + username)[0])) {
 			var tab = $('<div/>').addClass('tab tab-' + username).append($(document.createElement('span')).addClass('tabName').html(username));
 			$('.empty').before(tab);
 			var messageWindow = $('<div/>', { class: 'messages-' + username + ' js_messages hidden'});
 			$('.tabs').after(messageWindow);
-			// $('.tabs').append(tab);
 		}
 	},
 
@@ -217,12 +224,17 @@ Users = {
 	self: {
 		username: '',
 		privateKey: {},
+		privateKeyArmor: '',
 		publicKey: {},
+		publicKeyArmor: ''
 	},
 
 	addOwnKeys: function(keys) {
-		this.self.privateKey = openpgp.key.readArmored(keys.privateKeyArmored);
-		this.self.publicKey = openpgp.key.readArmored(keys.publicKeyArmored);
+		this.self.privateKeyArmor = keys.privateKeyArmored;
+		this.self.publicKeyArmor = keys.publicKeyArmored;
+		this.self.privateKey = openpgp.key.readArmored(keys.privateKeyArmored).keys[0];
+		this.self.privateKey.decrypt(Connection.sessionID);
+		this.self.publicKey = openpgp.key.readArmored(keys.publicKeyArmored).keys[0];
 	},
 
 	addContact: function(name, armoredPublicKey) { //Adds new contact. Public key MUST BE ARMORED.

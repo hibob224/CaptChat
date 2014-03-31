@@ -99,13 +99,19 @@ module.exports = function(io, sessionStore, express){
 		});
 
 		socket.on('acceptRequest', function (username) {
-			// User.addContact(getUserFromSocket(socket.id), username, console.log);
 			User.addContact(socket.handshake.user.username, username, console.log);
 		});
 
 		socket.on('sendRequest', function (username) {
-			// User.sendRequest(getUserFromSocket(socket.id), username, console.log );
 			User.sendRequest(socket.handshake.user.username, username, console.log );
+		});
+
+		socket.on('reqKey', function (username) {
+			if (App.users.hasOwnProperty(username)) {
+				socket.emit('reqKey', {username: username, pubKey: App.users[username].pubKey});
+			} else {
+				sendError('reqKey', 'User: ' + username + ' not connected.');
+			}
 		});
 
 		//***Socket Methods***//

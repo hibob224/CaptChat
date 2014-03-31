@@ -8,7 +8,7 @@ Connection = {
 			console.log(data.message);
 			Users.self.username = data.username;
 			this.sessionID = data.socketid;
-			var key = openpgp.generateKeyPair(1, 256, this.sessionID, this.sessionID);
+			var key = openpgp.generateKeyPair(1, 512, this.sessionID, this.sessionID);
 			Users.addOwnKeys(key);
 			this.sendEvent('userInfo', {pubKey:key.publicKeyArmored});
 			this.requestContacts();
@@ -28,11 +28,15 @@ Connection = {
 			console.error( data );
 		});
 		this.listen('contacts', function ( data ) {
-			Users.contacts = data;
 			$('.contacts').empty();
 			for (var index in data) {
+				Users.contacts[data[index]] = null;
 				CaptChat.addToContacts(data[index], 'https://s3.amazonaws.com/uifaces/faces/twitter/rude/128.jpg');
 			}
+		});
+		this.listen('reqKey', function ( data ) {
+			// data.pubKey = data.pubKey.replace(/\r?\n|\r/g,'');
+			Users.contacts[data.username] = openpgp.key.readArmored(data.pubKey).keys[0];
 		});
 	},
 
