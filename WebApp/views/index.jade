@@ -1,12 +1,28 @@
 extends layouts/index
 
 block headers
-	script(src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js")
-	script(src="/scripts/jquery-ui.js")
+block content
+	.content
+		.messageWrapper
+			.tabs
+				.tab.empty
+					span .
+			.messages.js_messages
+
+			input#input.chatBox(type="text", autocomplete="off" onkeypress="CaptChat.runScript(event)")
+			.grabber
+		.contacts
+		br
+block feet
+	canvas#textCanvas(width=150, height=30)
+	audio#notify
+		source(async src="/sounds/notify.ogg" type="audio/ogg")
+		source(async src="/sounds/notify.mp3" type="audio/mpeg")
+
+	script(async src="/scripts/openpgp.min.js")
+	script(src="/scripts/captchat.js")
 	script(src="/scripts/Font.js")
 	script(src="/socket.io/socket.io.js")
-	script(src="/scripts/openpgp.min.js")
-	script(src="/scripts/captchat.js")
 	script(src="/scripts/connection.js")
 	script.
 		var fontNames = ['moms']; //Add font name without file extension, must be .ttf
@@ -23,21 +39,3 @@ block headers
 
 			Connection.connect(window.location.origin + (#{openshift} ? (window.location.protocol == 'http:' ? ':8000' : ':8443') : ''));
 		}));
-
-block content
-	.content
-		.messageWrapper
-			.tabs
-				.tab.empty
-					span .
-			.messages.js_messages
-
-			input#input.chatBox(type="text", autocomplete="off" onkeypress="CaptChat.runScript(event)")
-			.grabber
-		.contacts
-		br
-block feet
-	canvas#textCanvas(width=150, height=30)
-	audio#notify
-		source(src="/sounds/notify.ogg" type="audio/ogg")
-		source(src="/sounds/notify.mp3" type="audio/mpeg")

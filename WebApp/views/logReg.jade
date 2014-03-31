@@ -2,47 +2,16 @@ extends layouts/index
 
 block headers
 	title CaptChat - #{view === 'login' ? 'Login' : 'Register'}
-	script(src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js")
-	script(src="/scripts/jquery-ui.js")
-	script.
-		function checkPasses() {
-			return $('.password').val() === $('.repPassword').val();
-		}
-		function changeView( view ) {
-			var time = 800
-			if ( view == 'register' ) {
-				$('.loginForm').slideUp(time, 'easeOutCubic', function() {
-					$('.registerForm').slideDown(time, 'easeOutCubic');
-				});
-			} else if ( view == 'login' ) {
-				$('.registerForm').slideUp(time, 'easeOutCubic', function() {
-					$('.loginForm').slideDown(time, 'easeOutCubic');
-				});
-			}
-		}
-		$(function() {
-			$('.js_aRegister').click( function( event ) {
-				document.title = 'CaptChat - Register';
-				window.history.pushState('Object', "CaptChat - ", '/register')
-				changeView('register');
-				event.preventDefault();
-			});
-			$('.js_aLogin').click( function( event ) {
-				document.title = 'CaptChat - Login';
-				window.history.pushState('Object', "CaptChat - ", '/login')
-				changeView('login');
-				event.preventDefault();
-			});
-		});
-	img(src="/images/logo.jpg" alt="CaptChat" class="logo")
+	img(src="/images/logo.png" alt="CaptChat" class="logo")
 
 block content
+	hr
 	.inputPage
 		.loginForm(class=view === 'login' ? undefined : 'hidden')
 			h2 Log In
 			p
 				|Enter your username and password to log in or&thinsp;
-				a.js_aRegister(href='/register') Register
+				a.js_changePage(href='/register') Register
 			form(method="post").userLogin
 				.field-wrapper
 					label(for="username") Username:
@@ -51,12 +20,11 @@ block content
 					label(for="password") Password:
 					input.password(required name="password", type="password", size="15")
 				input.submit(type="submit", value="Log In")
-
 		.registerForm(class=view === 'register' ? undefined : 'hidden')
 			h2 Register
 			p
 				| Return to&thinsp;
-				a.js_aLogin(href='/login') Login
+				a.js_changePage(href='/login') Login
 			form(method="post", onsubmit='return checkPasses()').userRegister
 				label(for="username") Username:
 				input.username(required name="username", type="text", autocomplete="off", size="15")
@@ -68,3 +36,28 @@ block content
 				input.repPassword(required name="repPassword" type="password", size="15")
 				br
 				input.submit(type="submit", value="Register" )
+block feet
+	script.
+		$(function() {
+			function checkPasses() {
+				return $('.password').val() === $('.repPassword').val();
+			}
+			function changeView( view ) {
+				var time = 800
+				if ( view == 'Register' ) {
+					$('.loginForm').slideUp(time, 'easeOutCubic', function() {
+						$('.registerForm').slideDown(time, 'easeOutCubic');
+					});
+				} else if ( view == 'Login' ) {
+					$('.registerForm').slideUp(time, 'easeOutCubic', function() {
+						$('.loginForm').slideDown(time, 'easeOutCubic');
+					});
+				} else { return; }
+				document.title = 'CaptChat - ' + view;
+				window.history.pushState('Object', "CaptChat - " + view, '/' + view.toLowerCase())
+			}
+			$('.js_changePage').click( function( event ) {
+				event.preventDefault();
+				changeView($(this).text());
+			});
+		});
