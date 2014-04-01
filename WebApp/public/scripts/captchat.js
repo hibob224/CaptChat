@@ -46,6 +46,9 @@ CaptChat = {
 				case '/accept':
 					Connection.acceptRequest(document.getElementById('input').value.substring(8).trim());
 					break;
+				case '/logout':
+					window.location = '/logout';
+					break;
 				default:
 					this.doTheThing();
 					$('.messages-' + recipient).append('<br/>'); //New line between messages
